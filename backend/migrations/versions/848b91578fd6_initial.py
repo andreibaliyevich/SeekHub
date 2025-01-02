@@ -1,8 +1,8 @@
 """initial
 
-Revision ID: 5e80ab82d6eb
+Revision ID: 848b91578fd6
 Revises: 
-Create Date: 2024-12-29 21:37:13.175203
+Create Date: 2025-01-02 22:20:55.793909
 
 """
 
@@ -14,7 +14,7 @@ import sqlmodel
 
 
 # revision identifiers, used by Alembic.
-revision: str = "5e80ab82d6eb"
+revision: str = "848b91578fd6"
 down_revision: Union[str, None] = None
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
@@ -25,15 +25,17 @@ def upgrade() -> None:
     op.create_table(
         "users",
         sa.Column("id", sa.Uuid(), nullable=False),
-        sa.Column("name", sqlmodel.sql.sqltypes.AutoString(), nullable=False),
+        sa.Column("email", sqlmodel.sql.sqltypes.AutoString(), nullable=False),
+        sa.Column("name", sa.String(length=64), nullable=False),
         sa.Column(
             "date_joined",
             sa.DateTime(),
             server_default=sa.text("TIMEZONE('utc', now())"),
-            nullable=True,
+            nullable=False,
         ),
-        sa.Column("date_of_birth", sa.Date(), nullable=True),
+        sa.Column("birthday", sa.Date(), nullable=False),
         sa.PrimaryKeyConstraint("id"),
+        sa.UniqueConstraint("email"),
     )
     op.create_index(op.f("ix_users_name"), "users", ["name"], unique=False)
     # ### end Alembic commands ###

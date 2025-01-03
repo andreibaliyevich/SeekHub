@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
 from uuid import UUID
+from sqlalchemy.exc import NoResultFound
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlmodel import select
 
@@ -38,7 +39,10 @@ class SQLRepository(AbstractRepository):
         return res.all()
 
     async def obj_by_id(self, id: UUID):
-        return await self.session.get(self.model, id)
+        obj = await self.session.get(self.model, id)
+        if not obj:
+            raise NoResultFound(f"{self.model.__name__} with ID {id} not found.")
+        return obj
 
     async def add(self, data: dict):
         obj = self.model(**data)
@@ -46,16 +50,12 @@ class SQLRepository(AbstractRepository):
         return obj
 
     async def update(self, id: UUID, data: dict):
-        obj = await self.session.get(self.model, id)
-        if not obj:
-            return None
+        obj = await self.obj_by_id(id)
         obj.sqlmodel_update(data)
         self.session.add(obj)
         return obj
 
     async def delete(self, id: UUID):
-        obj = await self.session.get(self.model, id)
-        if not obj:
-            return None
+        obj = await self.obj_by_id(id)
         await self.session.delete(obj)
         return id

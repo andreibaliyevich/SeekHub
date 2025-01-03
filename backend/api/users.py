@@ -14,24 +14,29 @@ router = APIRouter(
 
 @router.get("/list")
 async def user_list(request: Request, uow: UOWDep):
-    return await UsersService().get_queryset(uow, dict(request.query_params))
+    service = UsersService(uow)
+    return await service.get_queryset(dict(request.query_params))
 
 
 @router.post("/add")
 async def add_user(data: Annotated[UsersBase, Form()], uow: UOWDep):
-    return await UsersService().add_user(uow, data)
+    service = UsersService(uow)
+    return await service.add_user(data)
 
 
 @router.get("/get/{id}")
 async def get_user(id: UUID, uow: UOWDep):
-    return await UsersService().get_user_by_id(uow, id)
+    service = UsersService(uow)
+    return await service.get_user_by_id(id)
 
 
 @router.put("/update/{id}")
 async def update_user(id: UUID, data: Annotated[UsersBase, Form()], uow: UOWDep):
-    return await UsersService().update_user(uow, id, data)
+    service = UsersService(uow)
+    return await service.update_user(id, data)
 
 
 @router.delete("/delete/{id}")
 async def add_user(id: UUID, uow: UOWDep):
-    return await UsersService().delete_user(uow, id)
+    service = UsersService(uow)
+    return await service.delete_user(id)

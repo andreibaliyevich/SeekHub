@@ -4,32 +4,35 @@ from utilities.unit_of_work import AbstractUnitOfWork
 
 
 class UsersService:
-    async def get_queryset(self, uow: AbstractUnitOfWork, filters: dict):
-        async with uow:
-            return await uow.user_repository.queryset(filters)
+    def __init__(self, uow: AbstractUnitOfWork):
+        self.uow = uow
 
-    async def get_user_by_id(self, uow: AbstractUnitOfWork, id: UUID):
-        async with uow:
-            return await uow.user_repository.obj_by_id(id)
+    async def get_queryset(self, filters: dict):
+        async with self.uow:
+            return await self.uow.user_repository.queryset(filters)
 
-    async def add_user(self, uow: AbstractUnitOfWork, data: UsersBase):
+    async def get_user_by_id(self, id: UUID):
+        async with self.uow:
+            return await self.uow.user_repository.obj_by_id(id)
+
+    async def add_user(self, data: UsersBase):
         user_dict = data.model_dump()
-        async with uow:
-            new_user = await uow.user_repository.add(user_dict)
-            await uow.commit()
-            await uow.session.refresh(new_user)
+        async with self.uow:
+            new_user = await self.uow.user_repository.add(user_dict)
+            await self.uow.commit()
+            await self.uow.session.refresh(new_user)
             return new_user
 
-    async def update_user(self, uow: AbstractUnitOfWork, id: UUID, data: UsersBase):
+    async def update_user(self, id: UUID, data: UsersBase):
         user_dict = data.model_dump(exclude_unset=True)
-        async with uow:
-            user = await uow.user_repository.update(id, user_dict)
-            await uow.commit()
-            await uow.session.refresh(user)
+        async with self.uow:
+            user = await self.uow.user_repository.update(id, user_dict)
+            await self.uow.commit()
+            await self.uow.session.refresh(user)
             return user
 
-    async def delete_user(self, uow: AbstractUnitOfWork, id: UUID):
-        async with uow:
-            user_id = await uow.user_repository.delete(id)
-            await uow.commit()
+    async def delete_user(self, id: UUID):
+        async with self.uow:
+            user_id = await self.uow.user_repository.delete(id)
+            await self.uow.commit()
             return user_id

@@ -5,7 +5,6 @@ from sqlmodel import (
     SQLModel,
     Field,
     Column,
-    String,
     Date,
     DateTime,
     text,
@@ -14,8 +13,9 @@ from sqlmodel import (
 
 class Users(SQLModel, table=True):
     id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
-    email: EmailStr = Field(unique=True, nullable=False)
-    name: str = Field(sa_type=String(64), index=True)
+    email: EmailStr = Field(max_length=254, unique=True, nullable=False)
+    hashed_password: str = Field(max_length=255)
+    name: str = Field(max_length=64, index=True)
     date_joined: datetime = Field(
         sa_column=Column(
             type_=DateTime,

@@ -1,7 +1,12 @@
 from typing import Annotated
 from fastapi import APIRouter, Form, status
-from api.dependencies import FormDataDep, UserDep, UOWDep
-from schemas.auth import UserToken, RegisterUser, PasswordChange
+from api.dependencies import LoginFormDep, UserDep, UOWDep
+from schemas.auth import (
+    UserToken,
+    RegisterUser,
+    RegisteredUser,
+    PasswordChange,
+)
 from services.auth import AuthService
 
 
@@ -12,13 +17,20 @@ router = APIRouter(
 
 
 @router.post("/login", response_model=UserToken)
-async def login(form_data: FormDataDep, uow: UOWDep) -> UserToken:
+async def login(form_data: LoginFormDep, uow: UOWDep) -> UserToken:
     service = AuthService(uow)
     return await service.authenticate_user(form_data.username, form_data.password)
 
 
-@router.post("/register", status_code=status.HTTP_201_CREATED)
-async def register(form_data: Annotated[RegisterUser, Form()], uow: UOWDep):
+@router.post(
+        "/register",
+        response_model=RegisteredUser,
+        status_code=status.HTTP_201_CREATED,
+)
+async def register(
+    form_data: Annotated[RegisterUser, Form()],
+    uow: UOWDep,
+) -> RegisteredUser:
     service = AuthService(uow)
     return await service.register_user(form_data)
 

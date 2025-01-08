@@ -37,5 +37,5 @@ async def get_user(token: Annotated[str, Depends(oauth2_scheme)], uow: UOWDep):
     return user
 
 
-FormDataDep = Annotated[OAuth2PasswordRequestForm, Depends()]
+LoginFormDep = Annotated[OAuth2PasswordRequestForm, Depends()]
 UserDep = Annotated[Users, Depends(get_user)]

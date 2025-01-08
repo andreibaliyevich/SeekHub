@@ -1,5 +1,6 @@
-from datetime import date
+from datetime import date, datetime
 from typing import Annotated, Self
+from uuid import UUID
 from pydantic import (
     AfterValidator,
     BaseModel,
@@ -31,6 +32,14 @@ class RegisterUser(BaseModel):
         if self.password != self.confirm_password:
             raise ValueError("Passwords do not match")
         return self
+
+
+class RegisteredUser(BaseModel):
+    id: UUID
+    email: EmailStr
+    date_joined: datetime
+    name: str
+    birthday: date
 
 
 class PasswordChange(BaseModel):

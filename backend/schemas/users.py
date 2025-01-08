@@ -1,9 +1,16 @@
-from datetime import date
+from datetime import date, datetime
+from uuid import UUID
 from pydantic import BaseModel, EmailStr
 
 
-class UsersBase(BaseModel):
+class UserList(BaseModel):
+    id: UUID
+    name: str
+
+
+class UserDetails(BaseModel):
+    id: UUID
     email: EmailStr
-    password: str
+    date_joined: datetime
     name: str
     birthday: date

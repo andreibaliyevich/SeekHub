@@ -1,7 +1,7 @@
 from typing import Annotated
 from fastapi import APIRouter, Form, status
 from api.dependencies import FormDataDep, UserDep, UOWDep
-from schemas.auth import UserToken, RegisterUser
+from schemas.auth import UserToken, RegisterUser, PasswordChange
 from services.auth import AuthService
 
 
@@ -21,6 +21,16 @@ async def login(form_data: FormDataDep, uow: UOWDep) -> UserToken:
 async def register(form_data: Annotated[RegisterUser, Form()], uow: UOWDep):
     service = AuthService(uow)
     return await service.register_user(form_data)
+
+
+@router.post("/password-change", status_code=status.HTTP_204_NO_CONTENT)
+async def password_change(
+    form_data: Annotated[PasswordChange, Form()],
+    user: UserDep,
+    uow: UOWDep,
+):
+    service = AuthService(uow)
+    return await service.change_password(user, form_data)
 
 
 @router.get("/profile")

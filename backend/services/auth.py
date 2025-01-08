@@ -1,7 +1,9 @@
+from uuid import UUID
 from pydantic import EmailStr
 from exceptions.auth import InvalidCredentialsError
 from exceptions.form import InvalidFormDataError
-from schemas.auth import UserToken, RegisterUser
+from models.users import Users
+from schemas.auth import UserToken, RegisterUser, PasswordChange
 from utilities.auth import (
     verify_password,
     get_password_hash,
@@ -30,8 +32,6 @@ class AuthService:
         )
 
     async def register_user(self, data: RegisterUser):
-        if data.password != data.confirm_password:
-            raise InvalidFormDataError({"password": "The provided passwords do not match"})
         user_dict = data.model_dump()
         user_dict["hashed_password"] = get_password_hash(data.password)
         del user_dict["password"]
@@ -40,3 +40,10 @@ class AuthService:
         await self.uow.commit()
         await self.uow.session.refresh(new_user)
         return new_user
+
+    async def change_password(self, user: Users, data: PasswordChange):
+        if not verify_password(data.current_password, user.hashed_password):
+            raise InvalidFormDataError({"current_password": "Invalid current password"})
+        hashed_password = get_password_hash(data.new_password)
+        await self.uow.user_repository.update(user.id, {"hashed_password": hashed_password})
+        await self.uow.commit()

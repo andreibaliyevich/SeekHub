@@ -1,5 +1,12 @@
 from datetime import date
-from pydantic import BaseModel, EmailStr
+from typing import Annotated, Self
+from pydantic import (
+    AfterValidator,
+    BaseModel,
+    EmailStr,
+    model_validator,
+)
+from utilities.auth import validate_password
 
 
 class UserToken(BaseModel):
@@ -14,7 +21,25 @@ class TokenData(BaseModel):
 
 class RegisterUser(BaseModel):
     email: EmailStr
-    password: str
+    password: Annotated[str, AfterValidator(validate_password)]
     confirm_password: str
     name: str
     birthday: date
+
+    @model_validator(mode="after")
+    def check_passwords_match(self) -> Self:
+        if self.password != self.confirm_password:
+            raise ValueError("Passwords do not match")
+        return self
+
+
+class PasswordChange(BaseModel):
+    current_password: str
+    new_password: Annotated[str, AfterValidator(validate_password)]
+    confirm_new_password: str
+
+    @model_validator(mode="after")
+    def check_passwords_match(self) -> Self:
+        if self.new_password != self.confirm_new_password:
+            raise ValueError("New passwords do not match")
+        return self

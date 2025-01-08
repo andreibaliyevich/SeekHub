@@ -1,0 +1,25 @@
+from pydantic import EmailStr
+from exceptions.auth import InvalidCredentialsError
+from schemas.auth import UserToken
+from utilities.auth import verify_password, create_access_token
+from utilities.unit_of_work import AbstractUnitOfWork
+
+
+class AuthService:
+    def __init__(self, uow: AbstractUnitOfWork):
+        self.uow = uow
+
+    async def authenticate_user(self, email: EmailStr, password: str):
+        user = await self.uow.user_repository.obj_by_email(email)
+        if user is None:
+            raise InvalidCredentialsError
+        if user.disabled:
+            raise InvalidCredentialsError
+        if not verify_password(password, user.hashed_password):
+            raise InvalidCredentialsError
+        access_token = create_access_token(data={"sub": user.email})
+        return UserToken(
+            access_token=access_token,
+            token_type="Bearer",
+            name=user.name,
+        )

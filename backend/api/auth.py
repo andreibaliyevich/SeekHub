@@ -1,0 +1,22 @@
+from fastapi import APIRouter
+from api.dependencies import FormDataDep, UserDep, UOWDep
+from schemas.auth import UserToken
+from services.auth import AuthService
+
+
+router = APIRouter(
+    prefix="/auth",
+    tags=["Auth"],
+)
+
+
+@router.post("/login", response_model=UserToken)
+async def login(form_data: FormDataDep, uow: UOWDep) -> UserToken:
+    service = AuthService(uow)
+    return await service.authenticate_user(form_data.username, form_data.password)
+
+
+@router.get("/profile")
+async def read_users_me(user: UserDep, uow: UOWDep):
+    queryset = await uow.user_repository.queryset({})
+    return {"user": user, "queryset": queryset}

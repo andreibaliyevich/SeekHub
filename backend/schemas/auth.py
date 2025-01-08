@@ -52,3 +52,16 @@ class PasswordChange(BaseModel):
         if self.new_password != self.confirm_new_password:
             raise ValueError("New passwords do not match")
         return self
+
+
+class UserProfile(BaseModel):
+    id: UUID
+    email: EmailStr
+    date_joined: datetime
+    name: str
+    birthday: date
+
+
+class UserProfileUpdate(BaseModel):
+    name: str
+    birthday: date

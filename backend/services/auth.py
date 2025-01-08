@@ -1,9 +1,13 @@
-from uuid import UUID
 from pydantic import EmailStr
 from exceptions.auth import InvalidCredentialsError
 from exceptions.form import InvalidFormDataError
 from models.users import Users
-from schemas.auth import UserToken, RegisterUser, PasswordChange
+from schemas.auth import (
+    UserToken,
+    RegisterUser,
+    PasswordChange,
+    UserProfileUpdate,
+)
 from utilities.auth import (
     verify_password,
     get_password_hash,
@@ -47,3 +51,18 @@ class AuthService:
         hashed_password = get_password_hash(data.new_password)
         await self.uow.user_repository.update(user.id, {"hashed_password": hashed_password})
         await self.uow.commit()
+    
+    async def get_user_profile(self, user: Users):
+        return self.uow.user_repository.obj_by_id(user.id)
+
+    async def update_user_profile(self, user: Users, data: UserProfileUpdate):
+        user_dict = data.model_dump(exclude_unset=True)
+        user = await self.uow.user_repository.update(user.id, user_dict)
+        await self.uow.commit()
+        await self.uow.session.refresh(user)
+        return user
+
+    async def delete_user_profile(self, user: Users):
+        user_id = await self.uow.user_repository.delete(user.id)
+        await self.uow.commit()
+        return user_id

@@ -6,6 +6,8 @@ from schemas.auth import (
     RegisterUser,
     RegisteredUser,
     PasswordChange,
+    UserProfile,
+    UserProfileUpdate,
 )
 from services.auth import AuthService
 
@@ -45,7 +47,22 @@ async def password_change(
     return await service.change_password(user, form_data)
 
 
-@router.get("/profile")
-async def read_users_me(user: UserDep, uow: UOWDep):
-    queryset = await uow.user_repository.queryset({})
-    return {"user": user, "queryset": queryset}
+@router.get("/profile", response_model=UserProfile)
+async def profile(user: UserDep) -> UserProfile:
+    return user
+
+
+@router.put("/profile-update", response_model=UserProfileUpdate)
+async def profile_update(
+    form_data: Annotated[UserProfileUpdate, Form()],
+    user: UserDep,
+    uow: UOWDep,
+) -> UserProfileUpdate:
+    service = AuthService(uow)
+    return await service.update_user_profile(user, form_data)
+
+
+@router.delete("/profile-delete", status_code=status.HTTP_204_NO_CONTENT)
+async def profile_delete(user: UserDep, uow: UOWDep):
+    service = AuthService(uow)
+    return await service.delete_user_profile(user)

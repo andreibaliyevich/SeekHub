@@ -18,12 +18,6 @@ async def user_list(request: Request, uow: UOWDep):
     return await service.get_queryset(dict(request.query_params))
 
 
-@router.post("/", status_code=status.HTTP_201_CREATED)
-async def add_user(data: Annotated[UsersBase, Form()], uow: UOWDep):
-    service = UsersService(uow)
-    return await service.add_user(data)
-
-
 @router.get("/{id}")
 async def get_user(id: UUID, uow: UOWDep):
     service = UsersService(uow)

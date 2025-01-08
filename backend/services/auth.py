@@ -1,5 +1,6 @@
 from pydantic import EmailStr
-from exceptions.auth import InvalidCredentialsError, InvalidFormDataError
+from exceptions.auth import InvalidCredentialsError
+from exceptions.form import InvalidFormDataError
 from schemas.auth import UserToken, RegisterUser
 from utilities.auth import (
     verify_password,
@@ -30,7 +31,7 @@ class AuthService:
 
     async def register_user(self, data: RegisterUser):
         if data.password != data.confirm_password:
-            raise InvalidFormDataError({"password": "The provided passwords do not match."})
+            raise InvalidFormDataError({"password": "The provided passwords do not match"})
         user_dict = data.model_dump()
         user_dict["hashed_password"] = get_password_hash(data.password)
         del user_dict["password"]

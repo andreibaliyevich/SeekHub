@@ -1,5 +1,6 @@
 from uuid import UUID
 from schemas.users import UsersBase
+from utilities.auth import get_password_hash
 from utilities.unit_of_work import AbstractUnitOfWork
 
 
@@ -8,8 +9,7 @@ class UsersService:
         self.uow = uow
 
     async def get_queryset(self, filters: dict):
-        async with self.uow:
-            return await self.uow.user_repository.queryset(filters)
+        return await self.uow.user_repository.queryset(filters)
 
     async def get_user_by_id(self, id: UUID):
         async with self.uow:
@@ -17,22 +17,21 @@ class UsersService:
 
     async def add_user(self, data: UsersBase):
         user_dict = data.model_dump()
-        async with self.uow:
-            new_user = await self.uow.user_repository.add(user_dict)
-            await self.uow.commit()
-            await self.uow.session.refresh(new_user)
-            return new_user
+        user_dict["hashed_password"] = get_password_hash(data.password)
+        del user_dict["password"]
+        new_user = await self.uow.user_repository.add(user_dict)
+        await self.uow.commit()
+        await self.uow.session.refresh(new_user)
+        return new_user
 
     async def update_user(self, id: UUID, data: UsersBase):
         user_dict = data.model_dump(exclude_unset=True)
-        async with self.uow:
-            user = await self.uow.user_repository.update(id, user_dict)
-            await self.uow.commit()
-            await self.uow.session.refresh(user)
-            return user
+        user = await self.uow.user_repository.update(id, user_dict)
+        await self.uow.commit()
+        await self.uow.session.refresh(user)
+        return user
 
     async def delete_user(self, id: UUID):
-        async with self.uow:
-            user_id = await self.uow.user_repository.delete(id)
-            await self.uow.commit()
-            return user_id
+        user_id = await self.uow.user_repository.delete(id)
+        await self.uow.commit()
+        return user_id

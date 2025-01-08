@@ -2,7 +2,6 @@ from abc import ABC, abstractmethod
 from sqlalchemy.ext.asyncio import AsyncSession
 from db.database import async_session_maker
 from repositories.users import UsersRepository
-from utilities.repository import AbstractRepository
 
 
 class AbstractUnitOfWork(ABC):
@@ -17,7 +16,7 @@ class AbstractUnitOfWork(ABC):
 
     @property
     @abstractmethod
-    def user_repository(self) -> AbstractRepository:
+    def user_repository(self) -> UsersRepository:
         raise NotImplementedError
 
     @abstractmethod
@@ -50,7 +49,7 @@ class UnitOfWork(AbstractUnitOfWork):
         return self._session
 
     @property
-    def user_repository(self) -> AbstractRepository:
+    def user_repository(self) -> UsersRepository:
         if not self._user_repository:
             self._user_repository = UsersRepository(self.session)
         return self._user_repository

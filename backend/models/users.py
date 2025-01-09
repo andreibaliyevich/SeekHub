@@ -15,7 +15,7 @@ class Users(SQLModel, table=True):
     id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
     email: EmailStr = Field(max_length=254, unique=True, nullable=False)
     hashed_password: str = Field(max_length=255)
-    disabled: bool = Field(default=True)
+    is_active: bool = Field(default=False)
     date_joined: datetime = Field(
         sa_column=Column(
             type_=DateTime,

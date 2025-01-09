@@ -7,7 +7,7 @@ class UsersService:
         self.uow = uow
 
     async def get_queryset(self, filters: dict):
-        filters["disabled"] = False
+        filters["is_active"] = True
         return await self.uow.user_repository.queryset(filters)
 
     async def get_user_by_id(self, id: UUID):

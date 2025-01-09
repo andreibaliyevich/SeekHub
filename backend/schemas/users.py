@@ -6,6 +6,7 @@ from pydantic import BaseModel, EmailStr
 class UserList(BaseModel):
     id: UUID
     name: str
+    is_verified: bool
 
 
 class UserDetails(BaseModel):
@@ -14,3 +15,4 @@ class UserDetails(BaseModel):
     date_joined: datetime
     name: str
     birthday: date
+    is_verified: bool

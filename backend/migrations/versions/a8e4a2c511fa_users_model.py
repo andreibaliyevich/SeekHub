@@ -1,8 +1,8 @@
-"""initial
+"""Users Model
 
-Revision ID: e88cba08b575
+Revision ID: a8e4a2c511fa
 Revises: 
-Create Date: 2025-01-07 08:29:12.837751
+Create Date: 2025-01-09 15:30:03.720070
 
 """
 
@@ -14,7 +14,7 @@ import sqlmodel
 
 
 # revision identifiers, used by Alembic.
-revision: str = "e88cba08b575"
+revision: str = "a8e4a2c511fa"
 down_revision: Union[str, None] = None
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
@@ -46,6 +46,7 @@ def upgrade() -> None:
             "name", sqlmodel.sql.sqltypes.AutoString(length=64), nullable=False
         ),
         sa.Column("birthday", sa.Date(), nullable=False),
+        sa.Column("is_verified", sa.Boolean(), nullable=False),
         sa.PrimaryKeyConstraint("id"),
         sa.UniqueConstraint("email"),
     )

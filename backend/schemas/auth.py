@@ -60,6 +60,7 @@ class UserProfile(BaseModel):
     date_joined: datetime
     name: str
     birthday: date
+    is_verified: bool
 
 
 class UserProfileUpdate(BaseModel):

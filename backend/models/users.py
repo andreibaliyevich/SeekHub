@@ -25,3 +25,4 @@ class Users(SQLModel, table=True):
     )
     name: str = Field(max_length=64, index=True)
     birthday: date = Field(sa_type=Date)
+    is_verified: bool = Field(default=False)

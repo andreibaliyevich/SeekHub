@@ -24,7 +24,7 @@ class AuthService:
         user = await self.uow.user_repository.obj_by_email(email)
         if user is None:
             raise InvalidCredentialsError
-        if user.disabled:
+        if not user.is_active:
             raise InvalidCredentialsError
         if not verify_password(password, user.hashed_password):
             raise InvalidCredentialsError

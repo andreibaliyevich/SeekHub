@@ -7,8 +7,14 @@ from sqlmodel import (
     Column,
     Date,
     DateTime,
+    Relationship,
     text,
 )
+
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from models.photos import Photos
+from models.likes import Likes
 
 
 class Users(SQLModel, table=True):
@@ -19,10 +25,19 @@ class Users(SQLModel, table=True):
     date_joined: datetime = Field(
         sa_column=Column(
             type_=DateTime,
-            server_default=text("TIMEZONE('utc', now())"),
+            server_default=text("TIMEZONE('UTC', NOW())"),
             nullable=False,
         ),
     )
     name: str = Field(max_length=64, index=True)
     birthday: date = Field(sa_type=Date)
     is_verified: bool = Field(default=False)
+
+    photos: list["Photos"] = Relationship(
+        back_populates="owner",
+        cascade_delete=True,
+    )
+    photos_likes: list["Photos"] = Relationship(
+        back_populates="likes",
+        link_model=Likes,
+    )

@@ -20,10 +20,8 @@ class Likes(SQLModel, table=True):
         primary_key=True,
         ondelete="CASCADE",
     )
-    created_at: datetime = Field(
-        sa_column=Column(
-            type_=DateTime,
-            server_default=text("TIMEZONE('UTC', NOW())"),
-            nullable=False,
-        ),
-    )
+    created_at: datetime = Field(sa_column=Column(
+        type_=DateTime,
+        server_default=text("TIMEZONE('UTC', NOW())"),
+        nullable=False,
+    ))

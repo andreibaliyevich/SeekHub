@@ -18,13 +18,11 @@ from models.likes import Likes
 class Photos(SQLModel, table=True):
     id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
     file_url: str = Field(max_length=512)
-    uploaded_at: datetime = Field(
-        sa_column=Column(
-            type_=DateTime,
-            server_default=text("TIMEZONE('UTC', NOW())"),
-            nullable=False,
-        ),
-    )
+    uploaded_at: datetime = Field(sa_column=Column(
+        type_=DateTime,
+        server_default=text("TIMEZONE('UTC', NOW())"),
+        nullable=False,
+    ))
     is_public: bool = Field(default=True)
     is_primary: bool = Field(default=False)
 

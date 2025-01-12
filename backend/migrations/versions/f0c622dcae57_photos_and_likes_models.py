@@ -1,8 +1,8 @@
 """Photos and Likes models
 
-Revision ID: 279a2a523abe
+Revision ID: f0c622dcae57
 Revises: d8cf8dee8171
-Create Date: 2025-01-11 07:25:31.384373
+Create Date: 2025-01-12 07:10:21.817525
 
 """
 
@@ -14,7 +14,7 @@ import sqlmodel
 
 
 # revision identifiers, used by Alembic.
-revision: str = "279a2a523abe"
+revision: str = "f0c622dcae57"
 down_revision: Union[str, None] = "d8cf8dee8171"
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
@@ -26,7 +26,9 @@ def upgrade() -> None:
         "photos",
         sa.Column("id", sa.Uuid(), nullable=False),
         sa.Column(
-            "file_url", sqlmodel.sql.sqltypes.AutoString(), nullable=False
+            "file_url",
+            sqlmodel.sql.sqltypes.AutoString(length=512),
+            nullable=False,
         ),
         sa.Column(
             "uploaded_at",
@@ -35,6 +37,7 @@ def upgrade() -> None:
             nullable=False,
         ),
         sa.Column("is_public", sa.Boolean(), nullable=False),
+        sa.Column("is_primary", sa.Boolean(), nullable=False),
         sa.Column("owner_id", sa.Uuid(), nullable=False),
         sa.ForeignKeyConstraint(
             ["owner_id"], ["users.id"], ondelete="CASCADE"

@@ -2,6 +2,7 @@ from abc import ABC, abstractmethod
 from sqlalchemy.ext.asyncio import AsyncSession
 from db.database import async_session_maker
 from repositories.users import UsersRepository
+from repositories.photos import PhotosRepository
 
 
 class AbstractUnitOfWork(ABC):
@@ -16,7 +17,12 @@ class AbstractUnitOfWork(ABC):
 
     @property
     @abstractmethod
-    def user_repository(self) -> UsersRepository:
+    def users_repository(self) -> UsersRepository:
+        raise NotImplementedError
+
+    @property
+    @abstractmethod
+    def photos_repository(self) -> PhotosRepository:
         raise NotImplementedError
 
     @abstractmethod
@@ -40,7 +46,8 @@ class UnitOfWork(AbstractUnitOfWork):
     def __init__(self):
         self.session_factory = async_session_maker
         self._session = None
-        self._user_repository = None
+        self._users_repository = None
+        self._photos_repository = None
 
     @property
     def session(self) -> AsyncSession:
@@ -49,10 +56,16 @@ class UnitOfWork(AbstractUnitOfWork):
         return self._session
 
     @property
-    def user_repository(self) -> UsersRepository:
-        if not self._user_repository:
-            self._user_repository = UsersRepository(self.session)
-        return self._user_repository
+    def users_repository(self) -> UsersRepository:
+        if not self._users_repository:
+            self._users_repository = UsersRepository(self.session)
+        return self._users_repository
+
+    @property
+    def photos_repository(self) -> PhotosRepository:
+        if not self._photos_repository:
+            self._photos_repository = PhotosRepository(self.session)
+        return self._photos_repository
 
     async def __aenter__(self):
         self._session = self.session_factory()

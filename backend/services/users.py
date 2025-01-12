@@ -8,8 +8,7 @@ class UsersService:
 
     async def get_queryset(self, filters: dict):
         filters["is_active"] = True
-        return await self.uow.user_repository.queryset(filters)
+        return await self.uow.users_repository.queryset(filters)
 
     async def get_user_by_id(self, id: UUID):
-        async with self.uow:
-            return await self.uow.user_repository.obj_by_id(id)
+        return await self.uow.users_repository.obj_by_id(id)

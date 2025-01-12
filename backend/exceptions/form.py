@@ -6,4 +6,5 @@ class InvalidFormDataError(HTTPException):
         super().__init__(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail=detail,
+            headers={"X-Error-Type": "ValidationError"},
         )

@@ -21,7 +21,7 @@ class AuthService:
         self.uow = uow
 
     async def authenticate_user(self, email: EmailStr, password: str):
-        user = await self.uow.user_repository.obj_by_email(email)
+        user = await self.uow.users_repository.obj_by_email(email)
         if user is None:
             raise InvalidCredentialsError
         if not user.is_active:
@@ -40,7 +40,7 @@ class AuthService:
         user_dict["hashed_password"] = get_password_hash(data.password)
         del user_dict["password"]
         del user_dict["confirm_password"]
-        new_user = await self.uow.user_repository.add(user_dict)
+        new_user = await self.uow.users_repository.add(user_dict)
         await self.uow.commit()
         await self.uow.session.refresh(new_user)
         return new_user
@@ -49,20 +49,20 @@ class AuthService:
         if not verify_password(data.current_password, user.hashed_password):
             raise InvalidFormDataError({"current_password": "Invalid current password"})
         hashed_password = get_password_hash(data.new_password)
-        await self.uow.user_repository.update(user.id, {"hashed_password": hashed_password})
+        await self.uow.users_repository.update(user.id, {"hashed_password": hashed_password})
         await self.uow.commit()
-    
+
     async def get_user_profile(self, user: Users):
-        return self.uow.user_repository.obj_by_id(user.id)
+        return await self.uow.users_repository.obj_by_id(user.id)
 
     async def update_user_profile(self, user: Users, data: UserProfileUpdate):
-        user_dict = data.model_dump(exclude_unset=True)
-        user = await self.uow.user_repository.update(user.id, user_dict)
+        user_dict = data.model_dump()
+        user = await self.uow.users_repository.update(user.id, user_dict)
         await self.uow.commit()
         await self.uow.session.refresh(user)
         return user
 
     async def delete_user_profile(self, user: Users):
-        user_id = await self.uow.user_repository.delete(user.id)
+        user_id = await self.uow.users_repository.delete(user.id)
         await self.uow.commit()
         return user_id

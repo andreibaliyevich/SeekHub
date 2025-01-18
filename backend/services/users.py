@@ -11,4 +11,4 @@ class UsersService:
         return await self.uow.users_repository.queryset(filters)
 
     async def get_user_by_id(self, id: UUID):
-        return await self.uow.users_repository.obj_by_id(id)
+        return await self.uow.users_repository.get_full_profile(id)

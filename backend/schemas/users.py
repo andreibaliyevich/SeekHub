@@ -1,6 +1,8 @@
 from datetime import date, datetime
 from uuid import UUID
 from pydantic import BaseModel, EmailStr
+from schemas.photos import PhotoList
+from schemas.profiles import ProfileDetails
 
 
 class UserList(BaseModel):
@@ -10,9 +12,10 @@ class UserList(BaseModel):
 
 
 class UserDetails(BaseModel):
-    id: UUID
-    email: EmailStr
     date_joined: datetime
     name: str
     birthday: date
     is_verified: bool
+
+    profile: ProfileDetails
+    photos: list[PhotoList]

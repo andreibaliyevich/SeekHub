@@ -8,6 +8,7 @@ from schemas.auth import (
     PasswordChange,
     UserProfileUpdate,
 )
+from schemas.profiles import ProfileDetails
 from utilities.auth import (
     verify_password,
     get_password_hash,
@@ -41,6 +42,8 @@ class AuthService:
         del user_dict["password"]
         del user_dict["confirm_password"]
         new_user = await self.uow.users_repository.add(user_dict)
+        await self.uow.session.flush()
+        await self.uow.profiles_repository.add({"id": new_user.id})
         await self.uow.commit()
         await self.uow.session.refresh(new_user)
         return new_user
@@ -53,13 +56,21 @@ class AuthService:
         await self.uow.commit()
 
     async def get_user_profile(self, user: Users):
-        return await self.uow.users_repository.obj_by_id(user.id)
+        return await self.uow.users_repository.get_full_profile(user.id)
 
-    async def update_user_profile(self, user: Users, data: UserProfileUpdate):
-        user_dict = data.model_dump()
+    async def update_user_profile(
+        self,
+        user: Users,
+        body_data: UserProfileUpdate,
+    ):
+        user_dict = body_data.model_dump(exclude_none=True)
+        profile_dict = user_dict.pop("profile", {})
         user = await self.uow.users_repository.update(user.id, user_dict)
+        profile = await self.uow.profiles_repository.update(user.id, profile_dict)
         await self.uow.commit()
         await self.uow.session.refresh(user)
+        await self.uow.session.refresh(profile)
+        user.profile = profile
         return user
 
     async def delete_user_profile(self, user: Users):

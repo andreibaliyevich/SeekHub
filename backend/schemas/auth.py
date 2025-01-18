@@ -1,3 +1,4 @@
+from typing import Any
 from datetime import date, datetime
 from typing import Annotated, Self
 from uuid import UUID
@@ -7,6 +8,8 @@ from pydantic import (
     EmailStr,
     model_validator,
 )
+from schemas.photos import PhotoList
+from schemas.profiles import ProfileDetails, ProfileUpdate
 from utilities.auth import validate_password
 
 
@@ -62,7 +65,12 @@ class UserProfile(BaseModel):
     birthday: date
     is_verified: bool
 
+    profile: ProfileDetails
+    photos: list[PhotoList]
+
 
 class UserProfileUpdate(BaseModel):
-    name: str
-    birthday: date
+    name: str | None = None
+    birthday: date | None = None
+
+    profile: ProfileUpdate | None = None

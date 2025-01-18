@@ -1,5 +1,5 @@
 from typing import Annotated
-from fastapi import APIRouter, Form, status
+from fastapi import APIRouter, Body, Form, status
 from api.dependencies import LoginFormDep, UserDep, UOWDep
 from schemas.auth import (
     UserToken,
@@ -48,18 +48,19 @@ async def password_change(
 
 
 @router.get("/profile", response_model=UserProfile)
-async def profile(user: UserDep) -> UserProfile:
-    return user
+async def profile(user: UserDep, uow: UOWDep) -> UserProfile:
+    service = AuthService(uow)
+    return await service.get_user_profile(user)
 
 
 @router.put("/profile-update", response_model=UserProfileUpdate)
 async def profile_update(
-    form_data: Annotated[UserProfileUpdate, Form()],
+    body_data: Annotated[UserProfileUpdate, Body()],
     user: UserDep,
     uow: UOWDep,
 ) -> UserProfileUpdate:
     service = AuthService(uow)
-    return await service.update_user_profile(user, form_data)
+    return await service.update_user_profile(user, body_data)
 
 
 @router.delete("/profile-delete", status_code=status.HTTP_204_NO_CONTENT)

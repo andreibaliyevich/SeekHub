@@ -1,5 +1,5 @@
 from datetime import date, datetime
-import uuid
+from uuid import UUID, uuid4
 from pydantic import EmailStr
 from sqlmodel import (
     SQLModel,
@@ -19,7 +19,7 @@ from models.likes import Likes
 
 
 class Users(SQLModel, table=True):
-    id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
+    id: UUID = Field(default_factory=uuid4, primary_key=True)
     email: EmailStr = Field(max_length=254, unique=True, nullable=False)
     hashed_password: str = Field(max_length=255)
     is_active: bool = Field(default=False)

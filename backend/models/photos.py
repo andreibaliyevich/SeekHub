@@ -1,5 +1,5 @@
 from datetime import datetime
-import uuid
+from uuid import UUID, uuid4
 from sqlmodel import (
     SQLModel,
     Field,
@@ -16,7 +16,7 @@ from models.likes import Likes
 
 
 class Photos(SQLModel, table=True):
-    id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
+    id: UUID = Field(default_factory=uuid4, primary_key=True)
     file_url: str = Field(max_length=512)
     uploaded_at: datetime = Field(sa_column=Column(
         type_=DateTime,
@@ -26,7 +26,7 @@ class Photos(SQLModel, table=True):
     is_public: bool = Field(default=True)
     is_primary: bool = Field(default=False)
 
-    owner_id: uuid.UUID = Field(foreign_key="users.id", ondelete="CASCADE")
+    owner_id: UUID = Field(foreign_key="users.id", ondelete="CASCADE")
     owner: "Users" = Relationship(back_populates="photos")
 
     likes: list["Users"] = Relationship(

@@ -15,7 +15,7 @@ class PhotosService:
     async def _check_owner(self, photo_id: UUID, user: Users):
         photo = await self.uow.photos_repository.obj_by_id(photo_id)
         if photo.owner_id != user.id:
-            raise PermissionDeniedError
+            raise PermissionDeniedError()
         return photo
 
     async def upload_photo(self, file: UploadFile, user: Users):

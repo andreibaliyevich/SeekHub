@@ -23,11 +23,11 @@ class AuthService:
     async def authenticate_user(self, email: EmailStr, password: str):
         user = await self.uow.users_repository.obj_by_email(email)
         if user is None:
-            raise InvalidCredentialsError
+            raise InvalidCredentialsError()
         if not user.is_active:
-            raise InvalidCredentialsError
+            raise InvalidCredentialsError()
         if not verify_password(password, user.hashed_password):
-            raise InvalidCredentialsError
+            raise InvalidCredentialsError()
         access_token = create_access_token(data={"sub": user.email})
         return UserToken(
             access_token=access_token,

@@ -33,7 +33,7 @@ class RegisterUser(BaseModel):
     @model_validator(mode="after")
     def check_passwords_match(self) -> Self:
         if self.password != self.confirm_password:
-            raise ValueError("Passwords do not match")
+            raise ValueError("Passwords do not match.")
         return self
 
 
@@ -53,7 +53,7 @@ class PasswordChange(BaseModel):
     @model_validator(mode="after")
     def check_passwords_match(self) -> Self:
         if self.new_password != self.confirm_new_password:
-            raise ValueError("New passwords do not match")
+            raise ValueError("New passwords do not match.")
         return self
 
 
@@ -74,3 +74,11 @@ class UserProfileUpdate(BaseModel):
     birthday: date | None = None
 
     profile: ProfileUpdate | None = None
+
+    @model_validator(mode="before")
+    @classmethod
+    def check_at_least_one_field(cls, data: Any) -> Any:
+        if isinstance(data, dict):
+            if not any(data.values()):
+                raise ValueError("At least one field must be provided.")
+        return data

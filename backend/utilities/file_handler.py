@@ -19,7 +19,7 @@ class FileHandler:
         extension = file.filename.split(".")[-1].lower()
 
         if extension not in allowed_extensions:
-            raise InvalidFormDataError({"file": "Unsupported file type"})
+            raise InvalidFormDataError({"file": "Unsupported file type."})
 
         self.media_dir.mkdir(exist_ok=True)
         unique_filename = f"{uuid4()}.{extension}"

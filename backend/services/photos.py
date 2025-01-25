@@ -36,8 +36,8 @@ class PhotosService:
         new_is_primary = data.is_primary if data.is_primary is not None else photo.is_primary
         if not new_is_public and new_is_primary:
             raise InvalidFormDataError({
-                "is_public": "A primary photo cannot be private",
-                "is_primary": "A private photo cannot be primary",
+                "is_public": "A primary photo cannot be private.",
+                "is_primary": "A private photo cannot be primary.",
             })
         if new_is_primary and not photo.is_primary:
             await self.uow.photos_repository.unset_primary_photos(user.id)

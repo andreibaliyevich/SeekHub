@@ -10,5 +10,5 @@ class UsersService:
         filters["is_active"] = True
         return await self.uow.users_repository.queryset(filters)
 
-    async def get_user_by_id(self, id: UUID):
-        return await self.uow.users_repository.get_full_profile(id)
+    async def get_user_profile(self, id: UUID):
+        return await self.uow.users_repository.user_profile(id)

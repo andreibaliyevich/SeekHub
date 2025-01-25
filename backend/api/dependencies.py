@@ -29,7 +29,7 @@ async def get_user(token: Annotated[str, Depends(oauth2_scheme)], uow: UOWDep):
         token_data = TokenData(email=email)
     except InvalidTokenError:
         raise InvalidCredentialsError("Could not validate credentials")
-    user = await uow.users_repository.obj_by_email(email=token_data.email)
+    user = await uow.users_repository.user_by_email(email=token_data.email)
     if user is None:
         raise InvalidCredentialsError("Could not validate credentials")
     if not user.is_active:

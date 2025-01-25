@@ -14,9 +14,9 @@ for router in all_routers:
 async def integrity_error_handler(request: Request, exc: IntegrityError):
     error_message = str(exc.orig) if exc.orig else "Integrity error occurred."
     response_content = {
-        "detail": "A database integrity error occurred.",
-        "error": error_message,
-        "path": request.url.path
+        "error": "A database integrity error occurred.",
+        "detail": error_message,
+        "path": request.url.path,
     }
     if "unique constraint" in error_message:
         response_content["detail"] = "A record with this unique field already exists."
@@ -29,9 +29,9 @@ async def integrity_error_handler(request: Request, exc: IntegrityError):
 @app.exception_handler(NoResultFound)
 async def no_result_found_error_handler(request: Request, exc: NoResultFound):
     response_content = {
-        "detail": "The requested resource was not found.",
-        "error": str(exc),
-        "path": request.url.path
+        "error": "The requested resource was not found.",
+        "detail": str(exc),
+        "path": request.url.path,
     }
     return JSONResponse(
         status_code=status.HTTP_404_NOT_FOUND,

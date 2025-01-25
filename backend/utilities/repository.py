@@ -162,7 +162,7 @@ class SQLRepository(AbstractRepository):
             NoResultFound: If no object is found with the given ID.
         """
         obj = await self.session.get(self.model, id)
-        if not obj:
+        if obj is None:
             raise NoResultFound(f"{self.model.__name__} with ID {id} not found.")
         return obj
 

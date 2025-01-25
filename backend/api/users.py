@@ -20,4 +20,4 @@ async def user_list(request: Request, uow: UOWDep) -> list[UserList]:
 @router.get("/{id}", response_model=UserDetails)
 async def user_details(id: UUID, uow: UOWDep) -> UserDetails:
     service = UsersService(uow)
-    return await service.get_user_by_id(id)
+    return await service.get_user_profile(id)

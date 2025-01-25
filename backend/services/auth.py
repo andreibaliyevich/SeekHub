@@ -8,7 +8,6 @@ from schemas.auth import (
     PasswordChange,
     UserProfileUpdate,
 )
-from schemas.profiles import ProfileDetails
 from utilities.auth import (
     verify_password,
     get_password_hash,

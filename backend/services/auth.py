@@ -1,4 +1,5 @@
 from pydantic import EmailStr
+from sqlalchemy.exc import IntegrityError
 from exceptions.auth import InvalidCredentialsError
 from exceptions.form import InvalidFormDataError
 from models.users import Users
@@ -13,6 +14,7 @@ from utilities.auth import (
     get_password_hash,
     create_access_token,
 )
+from utilities.logging_utils import logger
 from utilities.unit_of_work import AbstractUnitOfWork
 
 
@@ -21,7 +23,7 @@ class AuthService:
         self.uow = uow
 
     async def authenticate_user(self, email: EmailStr, password: str):
-        user = await self.uow.users_repository.obj_by_email(email)
+        user = await self.uow.users_repository.user_by_email(email)
         if user is None:
             raise InvalidCredentialsError()
         if not user.is_active:
@@ -47,8 +49,10 @@ class AuthService:
                 await self.uow.profiles_repository.add({"id": new_user.id})
                 await self.uow.session.refresh(new_user)
         except Exception as e:
-            await self.uow.session.rollback()
-            raise ValueError(f"Failed to register user and profile: {e}")
+            await self.uow.rollback()
+            logger.error(f"Failed to register user and profile: {e}")
+            raise IntegrityError(statement=e.statement, params=e.params, orig=e.orig)
+        logger.info(f"User with email {user_dict['email']} registered.")
         return new_user
 
     async def change_password(self, user: Users, data: PasswordChange):
@@ -78,7 +82,7 @@ class AuthService:
                     updated_user = await self.uow.users_repository.update(user.id, user_dict)
                     await self.uow.session.flush()
             except Exception as e:
-                print(f"Error updating user: {e}")
+                logger.error(f"Error updating user: {e}")
 
         if profile_dict:
             try:
@@ -86,7 +90,7 @@ class AuthService:
                     updated_profile = await self.uow.profiles_repository.update(user.id, profile_dict)
                     await self.uow.session.flush()
             except Exception as e:
-                print(f"Error updating profile: {e}")
+                logger.error(f"Error updating profile: {e}")
 
         if updated_user or updated_profile:
             await self.uow.commit()
@@ -105,4 +109,5 @@ class AuthService:
     async def delete_user_profile(self, user: Users):
         user_id = await self.uow.users_repository.delete(user.id)
         await self.uow.commit()
+        logger.info(f"User with email {user.email} deleted.")
         return user_id

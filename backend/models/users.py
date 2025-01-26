@@ -32,7 +32,10 @@ class Users(SQLModel, table=True):
     birthday: date = Field(sa_type=Date)
     is_verified: bool = Field(default=False)
 
-    profile: "Profiles" = Relationship(back_populates="user")
+    profile: "Profiles" = Relationship(
+        back_populates="user",
+        cascade_delete=True,
+    )
     photos: list["Photos"] = Relationship(
         back_populates="owner",
         cascade_delete=True,

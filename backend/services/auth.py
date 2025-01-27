@@ -63,7 +63,7 @@ class AuthService:
         await self.uow.commit()
 
     async def get_user_profile(self, user: Users):
-        return await self.uow.users_repository.get_full_profile(user.id)
+        return await self.uow.users_repository.user_profile(user.id)
 
     async def update_user_profile(
         self,

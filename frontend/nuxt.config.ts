@@ -8,6 +8,7 @@ export default defineNuxtConfig({
   },
   modules: [
     '@pinia/nuxt',
+    '@nuxtjs/i18n',
     (_options, nuxt) => {
       nuxt.hooks.hook('vite:extendConfig', (config) => {
         // @ts-expect-error
@@ -15,6 +16,17 @@ export default defineNuxtConfig({
       })
     }
   ],
+  i18n: {
+    vueI18n: './i18n.config.ts',
+    strategy: 'prefix_except_default',
+    defaultLocale: 'en',
+    lazy: true,
+    langDir: '../locales',
+    locales: [
+      { code: 'en', language: 'en-US', file: 'en.ts', name: 'English' },
+      { code: 'ru', language: 'ru-RU', file: 'ru.ts', name: 'Русский' }
+    ]
+  },
   devtools: { enabled: true },
   devServer: {
     host: '0.0.0.0',

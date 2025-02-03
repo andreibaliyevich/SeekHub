@@ -32,9 +32,11 @@ const i18nHead = useLocaleHead()
     </Head>
     <Body>
       <v-app>
+        <AppHeader />
         <v-main>
           <slot />
         </v-main>
+        <AppFooter />
       </v-app>
     </Body>
   </Html>

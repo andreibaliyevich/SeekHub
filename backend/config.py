@@ -1,3 +1,5 @@
+from pydantic import computed_field, PostgresDsn, RedisDsn
+from pydantic_core import MultiHostUrl
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -16,13 +18,27 @@ class Settings(BaseSettings):
     REDIS_PORT: int
     REDIS_DB: str
 
+    @computed_field
     @property
-    def DATABASE_URL(self):
-        return f"postgresql+asyncpg://{self.DB_USER}:{self.DB_PASS}@{self.DB_HOST}:{self.DB_PORT}/{self.DB_NAME}"
+    def DATABASE_URL(self) -> PostgresDsn:
+        return MultiHostUrl.build(
+            scheme="postgresql+asyncpg",
+            username=self.DB_USER,
+            password=self.DB_PASS,
+            host=self.DB_HOST,
+            port=self.DB_PORT,
+            path=self.DB_NAME,
+        )
 
+    @computed_field
     @property
-    def REDIS_URL(self):
-        return f"redis://{self.REDIS_HOST}:{self.REDIS_PORT}/{self.REDIS_DB}"
+    def REDIS_URL(self) -> RedisDsn:
+        return MultiHostUrl.build(
+            scheme="redis",
+            host=self.REDIS_HOST,
+            port=self.REDIS_PORT,
+            path=self.REDIS_DB,
+        )
 
     model_config = SettingsConfigDict(env_file=".env")
 

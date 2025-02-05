@@ -50,10 +50,13 @@ async def photo_delete(id: UUID, user: UserDep, uow: UOWDep):
 @router.get("/get/{file_path:path}")
 async def get_photo(file_path: str):
     base_dir = Path("media").resolve()
-    full_path = Path(file_path).resolve()
+    full_path = Path(file_path).resolve(strict=False)
 
-    if not str(full_path).startswith(str(base_dir)):
+    try:
+        full_path.relative_to(base_dir)
+    except ValueError:
         raise PermissionDeniedError
+
     if not full_path.is_file():
         raise NotFoundError(detail="File not found.")
 

@@ -51,7 +51,7 @@ class FileHandler:
             allowed_extensions (set): A set of allowed file extensions (e.g., {"jpg", "png"}).
 
         Raises:
-            InvalidFormDataError: If the file extension is not in the allowed extensions or failed to save file.
+            InvalidDataError: If the file extension is not in the allowed extensions or failed to save file.
 
         Returns:
             str: The path to the saved file.

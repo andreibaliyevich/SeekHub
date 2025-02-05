@@ -4,7 +4,7 @@ Custom Exception for Invalid Form Data
 This module defines a custom exception class for handling data validation errors in a FastAPI application. The exception provides a standardized way to respond to invalid data with detailed error information.
 
 Classes:
-    InvalidFormDataError:
+    InvalidDataError:
         Raised when the submitted data is invalid or does not meet the expected validation criteria.
 
 Details:
@@ -29,7 +29,7 @@ class InvalidDataError(HTTPException):
         detail (dict | str): Custom error details (default: "Invalid data.").
 
     Example:
-        raise InvalidFormDataError({"field_name": "This field is required."})
+        raise InvalidDataError({"field_name": "This field is required."})
     """
     def __init__(self, detail: dict | str = "Invalid data."):
         super().__init__(

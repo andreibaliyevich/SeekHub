@@ -65,9 +65,12 @@ class FileHandler:
         unique_filename = f"{uuid4()}.{extension}"
         file_path = self.media_dir / unique_filename
 
-        with file.file as f:
-            with open(file_path, "wb") as out_file:
-                out_file.write(f.read())
+        try:
+            with file.file as f:
+                with open(file_path, "wb") as out_file:
+                    out_file.write(f.read())
+        except Exception:
+            raise InvalidFormDataError({"file": "Failed to save file"})
 
         return str(file_path)
 

@@ -1,7 +1,11 @@
+from pathlib import Path
 from typing import Annotated
 from uuid import UUID
 from fastapi import APIRouter, File, Form, status, UploadFile
+from fastapi.responses import FileResponse
 from api.dependencies import UserDep, UOWDep
+from exceptions.auth import PermissionDeniedError
+from exceptions.data import NotFoundError
 from schemas.photos import PhotoList, PhotoUpdate
 from services.photos import PhotosService
 
@@ -41,3 +45,16 @@ async def photo_update(
 async def photo_delete(id: UUID, user: UserDep, uow: UOWDep):
     service = PhotosService(uow)
     return await service.delete_photo(id, user)
+
+
+@router.get("/get/{file_path:path}")
+async def get_photo(file_path: str):
+    base_dir = Path("media").resolve()
+    full_path = Path(file_path).resolve()
+
+    if not str(full_path).startswith(str(base_dir)):
+        raise PermissionDeniedError
+    if not full_path.is_file():
+        raise NotFoundError(detail="File not found.")
+
+    return FileResponse(full_path)

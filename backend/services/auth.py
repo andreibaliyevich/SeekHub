@@ -1,7 +1,7 @@
 from pydantic import EmailStr
 from sqlalchemy.exc import IntegrityError
 from exceptions.auth import InvalidCredentialsError
-from exceptions.form import InvalidFormDataError
+from exceptions.data import InvalidDataError
 from models.users import Users
 from schemas.auth import (
     UserToken,
@@ -57,7 +57,7 @@ class AuthService:
 
     async def change_password(self, user: Users, data: PasswordChange):
         if not verify_password(data.current_password, user.hashed_password):
-            raise InvalidFormDataError({"current_password": "Invalid current password."})
+            raise InvalidDataError({"current_password": "Invalid current password."})
         hashed_password = get_password_hash(data.new_password)
         await self.uow.users_repository.update(user.id, {"hashed_password": hashed_password})
         await self.uow.commit()

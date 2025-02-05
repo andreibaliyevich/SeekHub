@@ -1,7 +1,7 @@
 from uuid import UUID
 from fastapi import UploadFile
 from exceptions.auth import PermissionDeniedError
-from exceptions.form import InvalidFormDataError
+from exceptions.data import InvalidDataError
 from models.users import Users
 from schemas.photos import PhotoUpdate
 from utilities.file_handler import FileHandler
@@ -35,7 +35,7 @@ class PhotosService:
         new_is_public = data.is_public if data.is_public is not None else photo.is_public
         new_is_primary = data.is_primary if data.is_primary is not None else photo.is_primary
         if not new_is_public and new_is_primary:
-            raise InvalidFormDataError({
+            raise InvalidDataError({
                 "is_public": "A primary photo cannot be private.",
                 "is_primary": "A private photo cannot be primary.",
             })

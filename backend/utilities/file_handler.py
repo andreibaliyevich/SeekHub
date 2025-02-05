@@ -22,7 +22,7 @@ import os
 from pathlib import Path
 from uuid import uuid4
 from fastapi import UploadFile
-from exceptions.form import InvalidFormDataError
+from exceptions.data import InvalidDataError
 
 
 class FileHandler:
@@ -51,7 +51,7 @@ class FileHandler:
             allowed_extensions (set): A set of allowed file extensions (e.g., {"jpg", "png"}).
 
         Raises:
-            InvalidFormDataError: If the file extension is not in the allowed extensions.
+            InvalidFormDataError: If the file extension is not in the allowed extensions or failed to save file.
 
         Returns:
             str: The path to the saved file.
@@ -59,7 +59,7 @@ class FileHandler:
         extension = file.filename.split(".")[-1].lower()
 
         if extension not in allowed_extensions:
-            raise InvalidFormDataError({"file": "Unsupported file type."})
+            raise InvalidDataError({"file": "Unsupported file type."})
 
         self.media_dir.mkdir(exist_ok=True)
         unique_filename = f"{uuid4()}.{extension}"
@@ -70,7 +70,7 @@ class FileHandler:
                 with open(file_path, "wb") as out_file:
                     out_file.write(f.read())
         except Exception:
-            raise InvalidFormDataError({"file": "Failed to save file"})
+            raise InvalidDataError({"file": "Failed to save file."})
 
         return str(file_path)
 

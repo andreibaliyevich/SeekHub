@@ -14,3 +14,10 @@ class PhotoList(BaseModel):
 class PhotoUpdate(BaseModel):
     is_public: bool | None = None
     is_primary: bool | None = None
+
+
+class PhotoListRead(BaseModel):
+    file_url: str
+    uploaded_at: datetime
+    is_public: bool
+    is_primary: bool

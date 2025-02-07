@@ -29,6 +29,10 @@ export default defineI18nLocale(async locale => {
         title: 'About Us',
         description: 'About Seek Hub',
         keywords: 'About, Seek, Hub'
+      },
+      error: {
+        text404: "The page you were looking for does not exist.",
+        action_text: "Go Home"
       }
     },
     hello: 'Hello, {name}!',

@@ -30,7 +30,7 @@ class AuthService:
             raise InvalidCredentialsError()
         if not verify_password(password, user.hashed_password):
             raise InvalidCredentialsError()
-        access_token = create_access_token(data={"sub": user.email})
+        access_token = create_access_token(data={"sub": str(user.id)})
         return UserToken(
             access_token=access_token,
             token_type="Bearer",

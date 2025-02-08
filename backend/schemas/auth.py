@@ -20,7 +20,7 @@ class UserToken(BaseModel):
 
 
 class TokenData(BaseModel):
-    email: EmailStr | None = None
+    id: UUID | None = None
 
 
 class RegisterUser(BaseModel):

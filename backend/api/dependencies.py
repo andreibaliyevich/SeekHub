@@ -23,13 +23,13 @@ oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/login")
 async def get_user(token: Annotated[str, Depends(oauth2_scheme)], uow: UOWDep):
     try:
         payload = jwt.decode(token, settings.SECRET_KEY, algorithms=[settings.ALGORITHM])
-        email: str = payload.get("sub")
-        if email is None:
+        user_id: str = payload.get("sub")
+        if user_id is None:
             raise InvalidCredentialsError("Could not validate credentials")
-        token_data = TokenData(email=email)
+        token_data = TokenData(id=user_id)
     except InvalidTokenError:
         raise InvalidCredentialsError("Could not validate credentials")
-    user = await uow.users_repository.user_by_email(email=token_data.email)
+    user = await uow.users_repository.obj_by_id(id=token_data.id)
     if user is None:
         raise InvalidCredentialsError("Could not validate credentials")
     if not user.is_active:

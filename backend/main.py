@@ -1,4 +1,5 @@
 from fastapi import FastAPI, Request, status
+from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from sqlalchemy.exc import IntegrityError, NoResultFound
 from api.routers import all_routers
@@ -7,8 +8,18 @@ from utilities.logging_utils import logger
 
 app = FastAPI(title="SeekHub")
 
-for router in all_routers:
-    app.include_router(router)
+origins = [
+    "http://127.0.0.1:3000",
+    "http://localhost:3000",
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 
 @app.exception_handler(IntegrityError)
@@ -52,3 +63,7 @@ async def global_exception_handler(request: Request, exc: Exception):
         status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
         content=response_content,
     )
+
+
+for router in all_routers:
+    app.include_router(router)

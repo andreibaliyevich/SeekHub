@@ -4,7 +4,9 @@ from exceptions.auth import InvalidCredentialsError
 from exceptions.data import InvalidDataError
 from models.users import Users
 from schemas.auth import (
-    UserToken,
+    Token,
+    RefreshToken,
+    TokenData,
     RegisterUser,
     PasswordChange,
     UserProfileUpdate,
@@ -12,7 +14,8 @@ from schemas.auth import (
 from utilities.auth import (
     verify_password,
     get_password_hash,
-    create_access_token,
+    create_tokens,
+    decode_token,
 )
 from utilities.logging_utils import logger
 from utilities.unit_of_work import AbstractUnitOfWork
@@ -25,16 +28,33 @@ class AuthService:
     async def authenticate_user(self, email: EmailStr, password: str):
         user = await self.uow.users_repository.user_by_email(email)
         if user is None:
+            raise InvalidCredentialsError("Invalid username or password.")
+        if not user.is_active:
+            raise InvalidCredentialsError("Invalid username or password.")
+        if not verify_password(password, user.hashed_password):
+            raise InvalidCredentialsError("Invalid username or password.")
+        access_token, refresh_token = await create_tokens(data={"sub": str(user.id)})
+        return Token(
+            access_token=access_token,
+            refresh_token=refresh_token,
+            token_type="Bearer",
+        )
+
+    async def refresh_tokens(self, data: RefreshToken):
+        user_id = await decode_token(token=data.refresh_token, refresh=True)
+        if user_id is None:
+            raise InvalidCredentialsError()
+        token_data = TokenData(id=user_id)
+        user = await self.uow.users_repository.obj_by_id(id=token_data.id)
+        if user is None:
             raise InvalidCredentialsError()
         if not user.is_active:
             raise InvalidCredentialsError()
-        if not verify_password(password, user.hashed_password):
-            raise InvalidCredentialsError()
-        access_token = create_access_token(data={"sub": str(user.id)})
-        return UserToken(
+        access_token, refresh_token = await create_tokens(data={"sub": str(user.id)})
+        return Token(
             access_token=access_token,
+            refresh_token=refresh_token,
             token_type="Bearer",
-            name=user.name,
         )
 
     async def register_user(self, data: RegisterUser):
@@ -65,12 +85,8 @@ class AuthService:
     async def get_user_profile(self, user: Users):
         return await self.uow.users_repository.user_profile(user.id)
 
-    async def update_user_profile(
-        self,
-        user: Users,
-        body_data: UserProfileUpdate,
-    ):
-        user_dict = body_data.model_dump(exclude_none=True)
+    async def update_user_profile(self, user: Users, data: UserProfileUpdate):
+        user_dict = data.model_dump(exclude_none=True)
         profile_dict = user_dict.pop("profile", {})
 
         updated_user = None

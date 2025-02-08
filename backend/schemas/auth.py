@@ -13,10 +13,14 @@ from schemas.profiles import ProfileDetails, ProfileUpdate
 from utilities.auth import validate_password
 
 
-class UserToken(BaseModel):
+class Token(BaseModel):
     access_token: str
+    refresh_token: str
     token_type: str
-    name: str
+
+
+class RefreshToken(BaseModel):
+    refresh_token: str
 
 
 class TokenData(BaseModel):

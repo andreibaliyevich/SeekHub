@@ -2,7 +2,8 @@ from typing import Annotated
 from fastapi import APIRouter, Body, Form, status
 from api.dependencies import LoginFormDep, UserDep, UOWDep
 from schemas.auth import (
-    UserToken,
+    Token,
+    RefreshToken,
     RegisterUser,
     RegisteredUser,
     PasswordChange,
@@ -18,10 +19,19 @@ router = APIRouter(
 )
 
 
-@router.post("/login", response_model=UserToken)
-async def login(form_data: LoginFormDep, uow: UOWDep) -> UserToken:
+@router.post("/token", response_model=Token)
+async def token(form_data: LoginFormDep, uow: UOWDep) -> Token:
     service = AuthService(uow)
     return await service.authenticate_user(form_data.username, form_data.password)
+
+
+@router.post("/refresh", response_model=Token)
+async def refresh(
+    body_data: Annotated[RefreshToken, Body()],
+    uow: UOWDep,
+) -> Token:
+    service = AuthService(uow)
+    return await service.refresh_tokens(body_data)
 
 
 @router.post(

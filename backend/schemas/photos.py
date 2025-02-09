@@ -3,6 +3,10 @@ from uuid import UUID
 from pydantic import BaseModel
 
 
+class PhotoURL(BaseModel):
+    file_url: str
+
+
 class PhotoList(BaseModel):
     id: UUID
     file_url: str

@@ -8,8 +8,8 @@ from schemas.auth import (
     RefreshToken,
     TokenData,
     RegisterUser,
-    PasswordChange,
     UserProfileUpdate,
+    PasswordChange,
 )
 from utilities.auth import (
     verify_password,
@@ -75,12 +75,8 @@ class AuthService:
         logger.info(f"User with email {user_dict['email']} registered.")
         return new_user
 
-    async def change_password(self, user: Users, data: PasswordChange):
-        if not verify_password(data.current_password, user.hashed_password):
-            raise InvalidDataError({"current_password": "Invalid current password."})
-        hashed_password = get_password_hash(data.new_password)
-        await self.uow.users_repository.update(user.id, {"hashed_password": hashed_password})
-        await self.uow.commit()
+    async def get_user_photo(self, user: Users):
+        return await self.uow.users_repository.user_photo(user.id)
 
     async def get_user_profile(self, user: Users):
         return await self.uow.users_repository.user_profile(user.id)
@@ -122,7 +118,14 @@ class AuthService:
         updated_user.profile = updated_profile
         return updated_user
 
-    async def delete_user_profile(self, user: Users):
+    async def change_password(self, user: Users, data: PasswordChange):
+        if not verify_password(data.current_password, user.hashed_password):
+            raise InvalidDataError({"current_password": "Invalid current password."})
+        hashed_password = get_password_hash(data.new_password)
+        await self.uow.users_repository.update(user.id, {"hashed_password": hashed_password})
+        await self.uow.commit()
+
+    async def delete_user(self, user: Users):
         user_id = await self.uow.users_repository.delete(user.id)
         await self.uow.commit()
         logger.info(f"User with email {user.email} deleted.")

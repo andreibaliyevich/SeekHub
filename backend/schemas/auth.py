@@ -8,7 +8,7 @@ from pydantic import (
     EmailStr,
     model_validator,
 )
-from schemas.photos import PhotoList
+from schemas.photos import PhotoURL, PhotoList
 from schemas.profiles import ProfileDetails, ProfileUpdate
 from utilities.auth import validate_password
 
@@ -49,16 +49,13 @@ class RegisteredUser(BaseModel):
     birthday: date
 
 
-class PasswordChange(BaseModel):
-    current_password: str
-    new_password: Annotated[str, AfterValidator(validate_password)]
-    confirm_new_password: str
+class UserPhoto(BaseModel):
+    id: UUID
+    email: EmailStr
+    name: str
+    is_verified: bool
 
-    @model_validator(mode="after")
-    def check_passwords_match(self) -> Self:
-        if self.new_password != self.confirm_new_password:
-            raise ValueError("New passwords do not match.")
-        return self
+    photos: list[PhotoURL]
 
 
 class UserProfile(BaseModel):
@@ -86,3 +83,15 @@ class UserProfileUpdate(BaseModel):
             if not any(data.values()):
                 raise ValueError("At least one field must be provided.")
         return data
+
+
+class PasswordChange(BaseModel):
+    current_password: str
+    new_password: Annotated[str, AfterValidator(validate_password)]
+    confirm_new_password: str
+
+    @model_validator(mode="after")
+    def check_passwords_match(self) -> Self:
+        if self.new_password != self.confirm_new_password:
+            raise ValueError("New passwords do not match.")
+        return self

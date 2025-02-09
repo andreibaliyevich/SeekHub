@@ -6,9 +6,10 @@ from schemas.auth import (
     RefreshToken,
     RegisterUser,
     RegisteredUser,
-    PasswordChange,
+    UserPhoto,
     UserProfile,
     UserProfileUpdate,
+    PasswordChange,
 )
 from services.auth import AuthService
 
@@ -47,14 +48,10 @@ async def register(
     return await service.register_user(form_data)
 
 
-@router.post("/password-change", status_code=status.HTTP_204_NO_CONTENT)
-async def password_change(
-    form_data: Annotated[PasswordChange, Form()],
-    user: UserDep,
-    uow: UOWDep,
-):
+@router.get("/user", response_model=UserPhoto)
+async def user(user: UserDep, uow: UOWDep) -> UserPhoto:
     service = AuthService(uow)
-    return await service.change_password(user, form_data)
+    return await service.get_user_photo(user)
 
 
 @router.get("/profile", response_model=UserProfile)
@@ -73,7 +70,17 @@ async def profile_update(
     return await service.update_user_profile(user, body_data)
 
 
-@router.delete("/profile-delete", status_code=status.HTTP_204_NO_CONTENT)
-async def profile_delete(user: UserDep, uow: UOWDep):
+@router.post("/password-change", status_code=status.HTTP_204_NO_CONTENT)
+async def password_change(
+    form_data: Annotated[PasswordChange, Form()],
+    user: UserDep,
+    uow: UOWDep,
+):
     service = AuthService(uow)
-    return await service.delete_user_profile(user)
+    return await service.change_password(user, form_data)
+
+
+@router.delete("/user-delete", status_code=status.HTTP_204_NO_CONTENT)
+async def user_delete(user: UserDep, uow: UOWDep):
+    service = AuthService(uow)
+    return await service.delete_user(user)

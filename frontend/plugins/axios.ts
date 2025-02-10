@@ -25,7 +25,7 @@ export default defineNuxtPlugin(() => {
     async (error) => {
       if (
         error.response.status === 401 &&
-        error.response.data.detail == 'Invalid credentials.'
+        error.response.data.detail === 'Invalid credentials.'
       ) {
         if (!refreshToken.value || error.config.url === '/auth/refresh') {
           console.error('Re-login required!')

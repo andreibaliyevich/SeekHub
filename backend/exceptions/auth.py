@@ -28,12 +28,12 @@ class InvalidCredentialsError(HTTPException):
         headers (dict): HTTP headers containing additional context, such as "WWW-Authenticate".
 
     Args:
-        detail (str): Custom error message (default: "Could not validate credentials.").
+        detail (str): Custom error message (default: "Invalid credentials.").
 
     Example:
         raise InvalidCredentialsError()
     """
-    def __init__(self, detail: str = "Could not validate credentials."):
+    def __init__(self, detail: str = "Invalid credentials."):
         super().__init__(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail=detail,

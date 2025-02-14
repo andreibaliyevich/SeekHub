@@ -65,13 +65,13 @@ const localePath = useLocalePath()
             </a>
           </div>
           <v-select
-          :model-value="locale"
-          @update:modelValue="(value) => setLocale(value)"
-          :items="locales"
-          item-title="name"
-          item-value="code"
-          variant="outlined"
-          density="comfortable"
+            :model-value="locale"
+            @update:modelValue="(value) => setLocale(value)"
+            :items="locales"
+            item-title="name"
+            item-value="code"
+            variant="outlined"
+            density="comfortable"
           ></v-select>
         </v-col>
         <v-col

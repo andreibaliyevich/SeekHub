@@ -39,12 +39,13 @@ watch(tokenType, async (newValue) => {
 })
 
 onMounted(() => {
+  isMobile.value = useDisplay().mobile.value
+
   if (tokenType.value) {
     getUser()
   } else {
     loadingStatus.value = false
   }
-  isMobile.value = useDisplay().mobile.value
 })
 </script>
 

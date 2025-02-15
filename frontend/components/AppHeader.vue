@@ -2,50 +2,17 @@
 import { useDisplay } from 'vuetify'
 import UserMenuHeader from './UserMenuHeader.vue'
 
-const { $axios } = useNuxtApp()
 const localePath = useLocalePath()
 const userStore = useUserStore()
-const tokenType = useCookie('tokenType')
 
 const loadingStatus = ref(true)
 const isMobile = ref(false)
 const navDrawer = ref(false)
 const userDrawer = ref(false)
 
-const getUser = async () => {
-  try {
-    const response = await $axios.get('/auth/user')
-    const fileUrl = response.data.photos[0]?.file_url
-    userStore.setUserData({
-      id: response.data.id,
-      email: response.data.email,
-      name: response.data.name,
-      is_verified: response.data.is_verified,
-      primary_photo: fileUrl ? `http://127.0.0.1:8000/photos/get/${fileUrl}` : null
-    })
-  } catch (error) {
-    console.error(error)
-  } finally {
-    loadingStatus.value = false
-  }
-}
-
-watch(tokenType, async (newValue) => {
-  if (newValue) {
-    getUser()
-  } else {
-    userStore.resetUserData()
-  }
-})
-
 onMounted(() => {
   isMobile.value = useDisplay().mobile.value
-
-  if (tokenType.value) {
-    getUser()
-  } else {
-    loadingStatus.value = false
-  }
+  loadingStatus.value = false
 })
 </script>
 

@@ -6,6 +6,8 @@ const logout = () => {
   useCookie('accessToken').value = null
   useCookie('refreshToken').value = null
   useCookie('tokenType').value = null
+  userStore.resetUserData()
+  navigateTo(localePath('/'))
 }
 </script>
 

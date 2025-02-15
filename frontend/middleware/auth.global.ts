@@ -18,7 +18,7 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
 
   if (userStore.isLoggedIn) {
     if (to.meta.requiresGuest) {
-      return navigateTo(localePath('/'))
+      return navigateTo(localePath('/'), { replace: true })
     }
     return
   }
@@ -55,6 +55,6 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
   }
 
   if (to.meta.requiresGuest && userIsLoggedIn) {
-    return navigateTo(localePath('/'))
+    return navigateTo(localePath('/'), { replace: true })
   }
 })

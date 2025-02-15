@@ -2,12 +2,15 @@ import axios from 'axios'
 
 export default defineNuxtPlugin(() => {
   const config = useRuntimeConfig()
+  const localePath = useLocalePath()
   const accessToken = useCookie('accessToken')
   const refreshToken = useCookie('refreshToken')
   const tokenType = useCookie('tokenType')
 
   const api = axios.create({
-    baseURL: config.public.apiBase as string
+    baseURL: import.meta.server
+      ? 'http://backend:8000'
+      : config.public.apiBase
   })
 
   api.interceptors.request.use((request) => {
@@ -23,16 +26,26 @@ export default defineNuxtPlugin(() => {
   api.interceptors.response.use(
     (response) => response,
     async (error) => {
+      if (!error.response) {
+        console.error("No response received from server!")
+        return Promise.reject(error)
+      }
+
       if (
         error.response.status === 401 &&
-        error.response.data.detail === 'Invalid credentials.'
+        (
+          error.response.data.detail === 'Not authenticated' ||
+          error.response.data.detail === 'Invalid credentials.'
+        )
       ) {
-        if (!refreshToken.value || error.config.url === '/auth/refresh') {
+        if (!refreshToken.value) {
           console.error('Re-login required!')
           logout()
           return Promise.reject(error)
         }
-        accessToken.value = null
+        if (error.config.url === '/auth/refresh') {
+          return Promise.reject(error)
+        }
 
         if (refreshing) {
           return new Promise((resolve) => {
@@ -45,7 +58,9 @@ export default defineNuxtPlugin(() => {
 
         refreshing = true
         try {
-          const { data } = await api.post('/auth/refresh', { refresh_token: refreshToken.value })
+          const { data } = await api.post('/auth/refresh', {
+            refresh_token: refreshToken.value
+          })
           accessToken.value = data.access_token
           refreshToken.value = data.refresh_token
           tokenType.value = data.token_type
@@ -70,7 +85,14 @@ export default defineNuxtPlugin(() => {
     accessToken.value = null
     refreshToken.value = null
     tokenType.value = null
-    navigateTo(`/login?redirect=${encodeURIComponent(window.location.pathname)}`)
+
+    refreshing = false
+    refreshSubscribers = []
+
+    return navigateTo({
+      path: localePath('/login'),
+      query: { redirect: window.location.pathname }
+    })
   }
 
   return {

@@ -19,11 +19,11 @@ export default defineNuxtConfig({
   ],
   runtimeConfig: {
     public: {
-      apiBase: 'http://localhost:8000/'
+      apiBase: 'http://localhost:8000'
     }
   },
   i18n: {
-    baseUrl: 'http://localhost:3000/',
+    baseUrl: 'http://localhost:3000',
     vueI18n: './i18n.config.ts',
     strategy: 'prefix_except_default',
     defaultLocale: 'en',

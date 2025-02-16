@@ -17,7 +17,7 @@ class UsersRepository(SQLRepository):
         res = await self.session.execute(stmt)
         return res.scalar_one_or_none()
 
-    async def user_photo(self, id: UUID):
+    async def user_with_primary_photo(self, id: UUID):
         stmt = (
             select(Users)
             .filter_by(id=id)

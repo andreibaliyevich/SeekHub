@@ -75,8 +75,8 @@ class AuthService:
         logger.info(f"User with email {user_dict['email']} registered.")
         return new_user
 
-    async def get_user_photo(self, user: Users):
-        return await self.uow.users_repository.user_photo(user.id)
+    async def get_user_with_primary_photo(self, user: Users):
+        return await self.uow.users_repository.user_with_primary_photo(user.id)
 
     async def get_user_profile(self, user: Users):
         return await self.uow.users_repository.user_profile(user.id)

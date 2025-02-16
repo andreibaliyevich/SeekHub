@@ -51,7 +51,7 @@ async def register(
 @router.get("/user", response_model=UserPhoto)
 async def user(user: UserDep, uow: UOWDep) -> UserPhoto:
     service = AuthService(uow)
-    return await service.get_user_photo(user)
+    return await service.get_user_with_primary_photo(user)
 
 
 @router.get("/profile", response_model=UserProfile)

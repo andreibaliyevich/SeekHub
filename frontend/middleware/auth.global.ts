@@ -36,7 +36,7 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
         email: response.data.email,
         name: response.data.name,
         is_verified: response.data.is_verified,
-        primary_photo: fileUrl ? `http://127.0.0.1:8000/photos/get/${fileUrl}` : null
+        primary_photo: fileUrl ?? null
       })
     } catch (error) {
       userStore.resetUserData()

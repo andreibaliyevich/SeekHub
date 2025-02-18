@@ -22,7 +22,7 @@ class PhotosService:
         allowed_extensions = {"jpg", "jpeg", "png", "gif"}
         photo_path = FileHandler().save_file(file, allowed_extensions)
         photo_dict = {
-            "file_url": photo_path,
+            "file_url": f"http://127.0.0.1:8000/photos/get/{photo_path}",
             "owner_id": user.id,
         }
         new_photo = await self.uow.photos_repository.add(photo_dict)
@@ -49,7 +49,8 @@ class PhotosService:
 
     async def delete_photo(self, id: UUID, user: Users):
         photo = await self._check_owner(id, user)
-        FileHandler().delete_file(photo.file_url)
+        photo_path = photo.file_url.removeprefix("http://127.0.0.1:8000/photos/get/")
+        FileHandler().delete_file(photo_path)
         photo_id = await self.uow.photos_repository.delete(id)
         await self.uow.commit()
         return photo_id

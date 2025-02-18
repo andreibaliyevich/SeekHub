@@ -8,7 +8,7 @@ const route = useRoute()
 const { t } = useI18n()
 const localePath = useLocalePath()
 
-const loadingStatus = ref(false)
+const isLoading = ref(false)
 const email = ref('')
 const password = ref('')
 const confirmPassword = ref('')
@@ -26,7 +26,7 @@ useHead({
 })
 
 const registration = async () => {
-  loadingStatus.value = true
+  isLoading.value = true
 
   let formData = new FormData()
   formData.append('email', email.value)
@@ -75,7 +75,7 @@ const registration = async () => {
       console.error('Unexpected error:', error)
     }
   } finally {
-    loadingStatus.value = false
+    isLoading.value = false
   }
 }
 </script>
@@ -120,7 +120,7 @@ const registration = async () => {
         <v-form @submit.prevent="registration">
           <v-text-field
             v-model="email"
-            :readonly="loadingStatus"
+            :readonly="isLoading"
             type="email"
             maxlength="254"
             variant="filled"
@@ -130,7 +130,7 @@ const registration = async () => {
           ></v-text-field>
           <v-text-field
             v-model="password"
-            :readonly="loadingStatus"
+            :readonly="isLoading"
             :type="passwordShow ? 'text' : 'password'"
             variant="filled"
             :label="$t('pages.register.password')"
@@ -141,7 +141,7 @@ const registration = async () => {
           ></v-text-field>
           <v-text-field
             v-model="confirmPassword"
-            :readonly="loadingStatus"
+            :readonly="isLoading"
             :type="confirmPasswordShow ? 'text' : 'password'"
             variant="filled"
             :label="$t('pages.register.confirm_password')"
@@ -152,7 +152,7 @@ const registration = async () => {
           ></v-text-field>
           <v-text-field
             v-model="name"
-            :readonly="loadingStatus"
+            :readonly="isLoading"
             type="text"
             variant="filled"
             :label="$t('pages.register.name')"
@@ -161,7 +161,7 @@ const registration = async () => {
           ></v-text-field>
           <v-text-field
             v-model="birthday"
-            :readonly="loadingStatus"
+            :readonly="isLoading"
             variant="filled"
             type="date"
             :label="$t('pages.register.birthday')"
@@ -169,7 +169,7 @@ const registration = async () => {
             :class="{ 'mb-3': !!errors.birthday }"
           ></v-text-field>
           <v-btn
-            :loading="loadingStatus"
+            :loading="isLoading"
             :disabled="
               !email ||
               !password ||

@@ -8,19 +8,19 @@ const route = useRoute()
 const { t } = useI18n()
 const localePath = useLocalePath()
 
-const loadingStatus = ref(false)
+const isLoading = ref(false)
 const username = ref('')
 const password = ref('')
 const passwordShow = ref(false)
 
-const errors = ref<Record<string, any> | null>(null)
+const errors = ref<Record<string, any>>({})
 
 useHead({
   title: t('pages.login.title')
 })
 
 const login = async () => {
-  loadingStatus.value = true
+  isLoading.value = true
 
   let formData = new FormData()
   formData.append('username', username.value)
@@ -32,6 +32,8 @@ const login = async () => {
     useCookie('accessToken').value = response.data.access_token
     useCookie('refreshToken').value = response.data.refresh_token
     useCookie('tokenType').value = response.data.token_type
+
+    errors.value = {}
 
     const redirectPath = Array.isArray(route.query.redirect)
       ? route.query.redirect[0]
@@ -47,7 +49,7 @@ const login = async () => {
       console.error('Unexpected error:', error)
     }
   } finally {
-    loadingStatus.value = false
+    isLoading.value = false
   }
 }
 </script>
@@ -91,14 +93,14 @@ const login = async () => {
       <v-form @submit.prevent="login">
         <v-text-field
           v-model="username"
-          :readonly="loadingStatus"
+          :readonly="isLoading"
           type="text"
           variant="filled"
           :label="$t('pages.login.email')"
         ></v-text-field>
         <v-text-field
           v-model="password"
-          :readonly="loadingStatus"
+          :readonly="isLoading"
           :type="passwordShow ? 'text' : 'password'"
           variant="filled"
           :label="$t('pages.login.password')"
@@ -106,7 +108,7 @@ const login = async () => {
           @click:append-inner="passwordShow = !passwordShow"
         ></v-text-field>
         <v-btn
-          :loading="loadingStatus"
+          :loading="isLoading"
           :disabled="!username || !password"
           type="submit"
           variant="flat"

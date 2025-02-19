@@ -55,8 +55,8 @@ const logout = () => {
     class="pt-0"
   >
     <v-list-item
-      :to="localePath('/about-us')"
-      :active="$route.name?.toString().includes('about-us')"
+      :to="localePath('/profile')"
+      :active="$route.name?.toString().includes('profile')"
       prepend-icon="mdi-account-edit"
     >
       <v-list-item-title>
@@ -76,6 +76,7 @@ const logout = () => {
     <v-list-item
       @click="logout()"
       prepend-icon="mdi-logout"
+      class="mb-0"
     >
       <v-list-item-title>
         {{ $t('header.log_out') }}

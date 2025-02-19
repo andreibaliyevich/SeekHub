@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useDisplay } from 'vuetify'
-import UserMenuHeader from './UserMenuHeader.vue'
+import UserMenuHeader from './user/UserMenuHeader.vue'
 
 const localePath = useLocalePath()
 const userStore = useUserStore()

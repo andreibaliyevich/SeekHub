@@ -10,7 +10,7 @@ const emit = defineEmits<{
   (event: 'uploadPhoto', photo: Photo): void
   (event: 'updatePhotoPublic', id: string, value: boolean): void
   (event: 'updatePhotoPrimary', id: string, value: boolean): void
-  (event: 'deletePhoto', id: string): void
+  (event: 'deletePhoto', id: string, isPrimary: boolean): void
 }>()
 const { photos } = defineProps<{
   photos: Photo[]
@@ -138,7 +138,7 @@ const deletePhoto = async () => {
   try {
     const response = await $axios.delete('/photos/delete/' + photoId.value)
     if (response.status === 204) {
-      emit('deletePhoto', photoId.value)
+      emit('deletePhoto', photoId.value, openPhoto.value.is_primary)
     }
   } catch (error) {
     console.error(error)

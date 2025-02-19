@@ -131,7 +131,7 @@ const updateUserProfile = async () => {
 }
 
 const uploadPhoto = (photo: Photo) => {
-  photos.value.unshift(photo)
+  photos.value.push(photo)
 }
 
 const updatePhotoPublic = (id: string, value: boolean) => {
@@ -149,11 +149,18 @@ const updatePhotoPrimary = (id: string, value: boolean) => {
   if (photoIndex !== -1) {
     photos.value[photoIndex].is_primary = value
   }
-  userStore.updatePhoto(photos.value[photoIndex].file_url)
+  if (value) {
+    userStore.updatePhoto(photos.value[photoIndex].file_url)
+  } else {
+    userStore.updatePhoto(null)
+  }
 }
 
-const deletePhoto = (id: string) => {
+const deletePhoto = (id: string, isPrimary: boolean) => {
   photos.value = photos.value.filter((element) => element.id !== id)
+  if (isPrimary) {
+    userStore.updatePhoto(null)
+  }
 }
 
 onMounted(() => {

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-const { t, locale, locales, setLocale } = useI18n()
+const { t } = useI18n()
 
 useSeoMeta({
   title: t('pages.home.title'),
@@ -11,7 +11,7 @@ useSeoMeta({
 </script>
 
 <template>
-  <div style="margin-left: 100px; margin-right: 100px;">
+  <div>
     <h1>Welcome to the homepage</h1>
     <h2>{{ $t('hello', { name: 'Andrei' }) }}</h2>
     <p>{{ $t('min_number_hours', { n: 3 }) }}</p>

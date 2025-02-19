@@ -98,7 +98,7 @@ const updatePhotoPublic = async () => {
 
   try {
     const response = await $axios.put(
-      '/photos/update/' + photoId.value,
+      `/photos/update/${photoId.value}`,
       formData
     )
     if (response.status === 200) {
@@ -120,7 +120,7 @@ const updatePhotoPrimary = async () => {
 
   try {
     const response = await $axios.put(
-      '/photos/update/' + photoId.value,
+      `/photos/update/${photoId.value}`,
       formData
     )
     if (response.status === 200) {
@@ -136,7 +136,7 @@ const updatePhotoPrimary = async () => {
 const deletePhoto = async () => {
   isDeletingPhoto.value = true
   try {
-    const response = await $axios.delete('/photos/delete/' + photoId.value)
+    const response = await $axios.delete(`/photos/delete/${photoId.value}`)
     if (response.status === 204) {
       emit('deletePhoto', photoId.value, openPhoto.value.is_primary)
     }

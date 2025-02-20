@@ -1,9 +1,8 @@
 <script setup lang="ts">
 import 'cropperjs/dist/cropper.css'
 import Cropper from 'cropperjs'
-import { useDate } from '@/composables/useDate'
-import type { Photo } from '@/types/photo'
-import BaseFileInputButton from '@/components/base/BaseFileInputButton.vue'
+import type { Photo } from '~/types/photo'
+import BaseFileInputButton from '~/components/base/BaseFileInputButton.vue'
 
 const { $axios } = useNuxtApp()
 const emit = defineEmits<{

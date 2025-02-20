@@ -77,10 +77,30 @@ export default defineI18nLocale(async locale => {
         success3: "You have been sent an email with a link that you need to click on to activate your account.",
         help: "By clicking Sign up, you agree to the terms of use."
       },
+      profile: {
+        title: "Profile",
+        name: "Name",
+        birthday: "Birthday",
+        update_profile: "Update profile",
+        upload_photo: "Upload photo",
+        make_private: "Make private",
+        make_public: "Make public",
+        make_primary: "Make primary",
+        make_non_primary: "Make non-primary",
+        you_want_remove_photo: "Are you sure you want to delete this photo?",
+        photo_information_will_lost: "All information associated with this photo will be lost."
+      },
       error: {
         text404: "The page you were looking for does not exist.",
         action_text: "Go Home"
       }
+    },
+    base_btn: {
+      cancel: "Cancel",
+      close: "Close",
+      upload: "Upload",
+      yes_i_am_sure: "Yes, I am sure",
+      no_cancel: "No, cancel"
     },
     hello: "Hello, {name}!",
     min_number_hours: "minimum 0 hours | minimum 1 hour | minimum {n} hours",

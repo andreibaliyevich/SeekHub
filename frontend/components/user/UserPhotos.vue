@@ -293,7 +293,7 @@ const deletePhoto = async () => {
           }"
           :disabled="isLoadingPhoto"
         >
-          {{ $t('pages.profile.cancel') }}
+          {{ $t('base_btn.cancel') }}
         </v-btn>
         <v-btn
           @click="uploadPhoto"
@@ -302,7 +302,7 @@ const deletePhoto = async () => {
           variant="flat"
           color="primary"
         >
-          {{ $t('pages.profile.upload') }}
+          {{ $t('base_btn.upload') }}
         </v-btn>
       </v-card-actions>
     </v-card>
@@ -351,7 +351,7 @@ const deletePhoto = async () => {
             photoId = null
           }"
         >
-          {{ $t('pages.profile.close') }}
+          {{ $t('base_btn.close') }}
         </v-btn>
       </v-card-actions>
     </v-card>
@@ -377,13 +377,13 @@ const deletePhoto = async () => {
             deletePhotoDialog = false
           }"
         >
-          {{ $t('pages.profile.no_cancel') }}
+          {{ $t('base_btn.no_cancel') }}
         </v-btn>
         <v-btn
           @click="deletePhoto"
           :loading="isDeletingPhoto"
         >
-          <strong>{{ $t('pages.profile.yes_i_am_sure') }}</strong>
+          <strong>{{ $t('base_btn.yes_i_am_sure') }}</strong>
         </v-btn>
       </v-card-actions>
     </v-card>

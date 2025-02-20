@@ -41,8 +41,6 @@ export default defineI18nLocale(async locale => {
         title: "Вход в аккаунт",
         have_account: "У вас нет аккаунта?",
         register: "Зарегистрироваться",
-        email: "Email",
-        password: "Пароль",
         log_in: "Войти",
         forgot_your_password: "Забыли свой пароль?",
         reset_password: "Сбросить пароль",
@@ -54,12 +52,6 @@ export default defineI18nLocale(async locale => {
         keywords: "Зарегистрироваться, Seek, Hub",
         have_account: "У вас уже есть аккаунт?",
         log_in: "Войти",
-        email: "Электронная почта",
-        password: "Пароль",
-        confirm_password: "Подтвердите пароль",
-        name: "Имя",
-        select_date: "Выберите дату",
-        birthday: "День рождения",
         register: "Зарегистрироваться",
         email_unique: "Пользователь с таким адресом электронной почты уже существует.",
         email_valid1: "Адрес электронной почты должен содержать знак @.",
@@ -79,8 +71,6 @@ export default defineI18nLocale(async locale => {
       },
       profile: {
         title: "Профиль",
-        name: "Имя",
-        birthday: "День рождения",
         update_profile: "Обновить профиль",
         upload_photo: "Загрузить фото",
         make_private: "Сделать приватным",
@@ -93,6 +83,16 @@ export default defineI18nLocale(async locale => {
       error: {
         text404: "Страница, которую вы искали, не существует.",
         action_text: "На главную"
+      }
+    },
+    user: {
+      email: "Электронная почта",
+      password: "Пароль",
+      confirm_password: "Подтвердите пароль",
+      name: "Имя",
+      birthday: "День рождения",
+      profile: {
+        gender: "Пол"
       }
     },
     base_btn: {

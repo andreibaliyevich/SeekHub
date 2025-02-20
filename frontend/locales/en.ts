@@ -41,8 +41,6 @@ export default defineI18nLocale(async locale => {
         title: "Login to your account",
         have_account: "Don't have an account?",
         register: "Register",
-        email: "Email",
-        password: "Password",
         log_in: "Log in",
         forgot_your_password: "Forgot your password?",
         reset_password: "Reset password",
@@ -54,12 +52,6 @@ export default defineI18nLocale(async locale => {
         keywords: "Register, Seek, Hub",
         have_account: "Already have an account?",
         log_in: "Log in",
-        email: "Email",
-        password: "Password",
-        confirm_password: "Confirm password",
-        name: "Name",
-        select_date: "Select date",
-        birthday: "Birthday",
         register: "Register",
         email_unique: "A user with this email already exists.",
         email_valid1: "An email address must have an @-sign.",
@@ -79,8 +71,6 @@ export default defineI18nLocale(async locale => {
       },
       profile: {
         title: "Profile",
-        name: "Name",
-        birthday: "Birthday",
         update_profile: "Update profile",
         upload_photo: "Upload photo",
         make_private: "Make private",
@@ -93,6 +83,16 @@ export default defineI18nLocale(async locale => {
       error: {
         text404: "The page you were looking for does not exist.",
         action_text: "Go Home"
+      }
+    },
+    user: {
+      email: "Email",
+      password: "Password",
+      confirm_password: "Confirm password",
+      name: "Name",
+      birthday: "Birthday",
+      profile: {
+        gender: "Gender"
       }
     },
     base_btn: {

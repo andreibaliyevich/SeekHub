@@ -96,14 +96,14 @@ const login = async () => {
           :readonly="isLoading"
           type="text"
           variant="filled"
-          :label="$t('pages.login.email')"
+          :label="$t('user.email')"
         ></v-text-field>
         <v-text-field
           v-model="password"
           :readonly="isLoading"
           :type="passwordShow ? 'text' : 'password'"
           variant="filled"
-          :label="$t('pages.login.password')"
+          :label="$t('user.password')"
           :append-inner-icon="passwordShow ? 'mdi-eye' : 'mdi-eye-off'"
           @click:append-inner="passwordShow = !passwordShow"
         ></v-text-field>

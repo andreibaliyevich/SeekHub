@@ -1,8 +1,8 @@
-"""Profiles Model
+"""profiles_model
 
-Revision ID: 904fd7adb985
+Revision ID: e31e228193d1
 Revises: 1fcc0f0ff32d
-Create Date: 2025-01-27 03:32:53.627763
+Create Date: 2025-02-20 08:35:42.443164
 
 """
 
@@ -15,7 +15,7 @@ import sqlmodel
 from sqlalchemy.dialects import postgresql
 
 # revision identifiers, used by Alembic.
-revision: str = "904fd7adb985"
+revision: str = "e31e228193d1"
 down_revision: Union[str, None] = "1fcc0f0ff32d"
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
@@ -55,14 +55,14 @@ def upgrade() -> None:
             "ethnicity",
             sa.Enum(
                 "ASIAN",
-                "BLACK",
-                "LATIN",
+                "BLACK_AFRICAN_DESCENT",
+                "LATIN_HISPANIC",
                 "EAST_INDIAN",
                 "MIDDLE_EASTERN",
                 "MIXED",
                 "NATIVE_AMERICAN",
                 "PACIFIC_ISLANDER",
-                "WHITE",
+                "WHITE_CAUCASIAN",
                 "OTHER",
                 name="ethnicitytype",
             ),
@@ -110,9 +110,9 @@ def upgrade() -> None:
                 "ASSOCIATES_DEGREE",
                 "BACHELORS_DEGREE",
                 "GRADUATE_DEGREE",
-                "PHD",
-                "MD",
-                "JD",
+                "PHD_POST_DOCTORAL",
+                "MD_MEDICAL_DOCTOR",
+                "LAWYER_ATTORNEY",
                 name="educationlevel",
             ),
             nullable=True,

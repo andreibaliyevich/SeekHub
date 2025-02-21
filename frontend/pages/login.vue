@@ -1,12 +1,15 @@
 <script setup lang="ts">
 import { isAxiosError } from 'axios'
 
-definePageMeta({ requiresGuest: true })
-
 const { $axios } = useNuxtApp()
 const route = useRoute()
 const { t } = useI18n()
 const localePath = useLocalePath()
+
+definePageMeta({ requiresGuest: true })
+useHead({
+  title: t('pages.login.title')
+})
 
 const isLoading = ref(false)
 const username = ref('')
@@ -14,10 +17,6 @@ const password = ref('')
 const passwordShow = ref(false)
 
 const errors = ref<Record<string, any>>({})
-
-useHead({
-  title: t('pages.login.title')
-})
 
 const login = async () => {
   isLoading.value = true
@@ -27,11 +26,11 @@ const login = async () => {
   formData.append('password', password.value)
 
   try {
-    const response = await $axios.post('/auth/token', formData)
+    const { data } = await $axios.post('/auth/token', formData)
 
-    useCookie('accessToken').value = response.data.access_token
-    useCookie('refreshToken').value = response.data.refresh_token
-    useCookie('tokenType').value = response.data.token_type
+    useCookie('accessToken').value = data.access_token
+    useCookie('refreshToken').value = data.refresh_token
+    useCookie('tokenType').value = data.token_type
 
     errors.value = {}
 
@@ -94,7 +93,8 @@ const login = async () => {
         <v-text-field
           v-model="username"
           :readonly="isLoading"
-          type="text"
+          type="email"
+          maxlength="254"
           variant="filled"
           :label="$t('user.email')"
         ></v-text-field>
@@ -105,7 +105,7 @@ const login = async () => {
           variant="filled"
           :label="$t('user.password')"
           :append-inner-icon="passwordShow ? 'mdi-eye' : 'mdi-eye-off'"
-          @click:append-inner="passwordShow = !passwordShow"
+          @click:appendInner="passwordShow = !passwordShow"
         ></v-text-field>
         <v-btn
           :loading="isLoading"

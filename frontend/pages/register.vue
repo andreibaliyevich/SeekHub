@@ -1,12 +1,15 @@
 <script setup lang="ts">
 import { isAxiosError } from 'axios'
 
-definePageMeta({ requiresGuest: true })
-
 const { $axios } = useNuxtApp()
 const route = useRoute()
 const { t } = useI18n()
 const localePath = useLocalePath()
+
+definePageMeta({ requiresGuest: true })
+useHead({
+  title: t('pages.register.title')
+})
 
 const isLoading = ref(false)
 const email = ref('')
@@ -21,10 +24,6 @@ const confirmPasswordShow = ref(false)
 const status = ref<number | null>(null)
 const errors = ref<Record<string, any>>({})
 
-useHead({
-  title: t('pages.register.title')
-})
-
 const registration = async () => {
   isLoading.value = true
 
@@ -36,8 +35,8 @@ const registration = async () => {
   formData.append('birthday', birthday.value)
 
   try {
-    const response = await $axios.post('/auth/register', formData)
-    status.value = response.status
+    const { status } = await $axios.post('/auth/register', formData)
+    status.value = status
     errors.value = {}
   } catch (error) {
     status.value = null
@@ -135,7 +134,7 @@ const registration = async () => {
             variant="filled"
             :label="$t('user.password')"
             :append-inner-icon="passwordShow ? 'mdi-eye' : 'mdi-eye-off'"
-            @click:append-inner="passwordShow = !passwordShow"
+            @click:appendInner="passwordShow = !passwordShow"
             :error-messages="errors.password ?? []"
             :class="{ 'mb-3': !!errors.password }"
           ></v-text-field>
@@ -146,7 +145,7 @@ const registration = async () => {
             variant="filled"
             :label="$t('user.confirm_password')"
             :append-inner-icon="confirmPasswordShow ? 'mdi-eye' : 'mdi-eye-off'"
-            @click:append-inner="confirmPasswordShow = !confirmPasswordShow"
+            @click:appendInner="confirmPasswordShow = !confirmPasswordShow"
             :error-messages="errors.confirm_password ?? []"
             :class="{ 'mb-3': !!errors.confirm_password }"
           ></v-text-field>

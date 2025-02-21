@@ -74,9 +74,9 @@ const uploadPhoto = async () => {
   formData.append('file', canvasBlob, photoImg.value.alt)
 
   try {
-    const response = await $axios.post('/photos/upload', formData)
-    if (response.status === 201) {
-      emit('uploadPhoto', response.data)
+    const { data, status } = await $axios.post('/photos/upload', formData)
+    if (status === 201) {
+      emit('uploadPhoto', data)
     }
   } catch (error) {
     console.error(error)
@@ -90,18 +90,17 @@ const uploadPhoto = async () => {
 
 const updatePhotoPublic = async () => {
   isSettingPublic.value = true
-  const isPublic = !openPhoto.value.is_public
 
   let formData = new FormData()
-  formData.append('is_public', isPublic)
+  formData.append('is_public', !openPhoto.value.is_public)
 
   try {
-    const response = await $axios.put(
+    const { data, status } = await $axios.put(
       `/photos/update/${photoId.value}`,
       formData
     )
-    if (response.status === 200) {
-      emit('updatePhotoPublic', photoId.value, isPublic)
+    if (status === 200) {
+      emit('updatePhotoPublic', photoId.value, data.is_public)
     }
   } catch (error) {
     console.error(error)
@@ -112,18 +111,17 @@ const updatePhotoPublic = async () => {
 
 const updatePhotoPrimary = async () => {
   isSettingPrimary.value = true
-  const isPrimary = !openPhoto.value.is_primary
 
   let formData = new FormData()
-  formData.append('is_primary', isPrimary)
+  formData.append('is_primary', !openPhoto.value.is_primary)
 
   try {
-    const response = await $axios.put(
+    const { data, status } = await $axios.put(
       `/photos/update/${photoId.value}`,
       formData
     )
-    if (response.status === 200) {
-      emit('updatePhotoPrimary', photoId.value, isPrimary)
+    if (status === 200) {
+      emit('updatePhotoPrimary', photoId.value, data.is_primary)
     }
   } catch (error) {
     console.error(error)
@@ -135,8 +133,8 @@ const updatePhotoPrimary = async () => {
 const deletePhoto = async () => {
   isDeletingPhoto.value = true
   try {
-    const response = await $axios.delete(`/photos/delete/${photoId.value}`)
-    if (response.status === 204) {
+    const { status } = await $axios.delete(`/photos/delete/${photoId.value}`)
+    if (status === 204) {
       emit('deletePhoto', photoId.value, openPhoto.value.is_primary)
     }
   } catch (error) {

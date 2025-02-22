@@ -18,6 +18,7 @@ class Cities(SQLModel, table=True):
     name_ascii: str = Field(max_length=150, index=True)
     location: str = Field(sa_column=Column(
         Geometry(geometry_type="POINT", srid=4326),
+        index=True,
     ))
     country: str = Field(max_length=100)
     country_code: str = Field(max_length=3, index=True)

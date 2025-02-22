@@ -1,8 +1,8 @@
-"""profiles_model
+"""Profiles Model
 
-Revision ID: e31e228193d1
-Revises: 1fcc0f0ff32d
-Create Date: 2025-02-20 08:35:42.443164
+Revision ID: 89cbdf70d5c5
+Revises: 5085a2ce44e9
+Create Date: 2025-02-21 13:21:43.806104
 
 """
 
@@ -15,8 +15,8 @@ import sqlmodel
 from sqlalchemy.dialects import postgresql
 
 # revision identifiers, used by Alembic.
-revision: str = "e31e228193d1"
-down_revision: Union[str, None] = "1fcc0f0ff32d"
+revision: str = "89cbdf70d5c5"
+down_revision: Union[str, None] = "5085a2ce44e9"
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
 

@@ -17,6 +17,7 @@ Methods:
         users_repository: Abstract property for accessing the UsersRepository.
         profiles_repository: Abstract property for accessing the ProfilesRepository.
         photos_repository: Abstract property for accessing the PhotosRepository.
+        cities_repository: Abstract property for accessing the CitiesRepository.
         __aenter__(): Abstract method for entering an async context.
         __aexit__(): Abstract method for exiting an async context.
         commit(): Abstract method for committing a transaction.
@@ -28,6 +29,7 @@ Methods:
         users_repository: Property to lazily initialize and return the UsersRepository.
         profiles_repository: Property to lazily initialize and return the ProfilesRepository.
         photos_repository: Property to lazily initialize and return the PhotosRepository.
+        cities_repository: Property to lazily initialize and return the CitiesRepository.
         __aenter__(): Enters the context manager, creating a database session.
         __aexit__(): Exits the context manager, rolling back on exception and closing the session.
         commit(): Commits the current transaction.
@@ -40,6 +42,7 @@ from db.database import async_session_maker
 from repositories.users import UsersRepository
 from repositories.profiles import ProfilesRepository
 from repositories.photos import PhotosRepository
+from repositories.cities import CitiesRepository
 
 
 class AbstractUnitOfWork(ABC):
@@ -61,9 +64,6 @@ class AbstractUnitOfWork(ABC):
     def session(self) -> AsyncSession:
         """
         Abstract property to access the database session.
-
-        Returns:
-            AsyncSession: The database session.
         """
         raise NotImplementedError
 
@@ -72,9 +72,6 @@ class AbstractUnitOfWork(ABC):
     def users_repository(self) -> UsersRepository:
         """
         Abstract property to access the UsersRepository.
-
-        Returns:
-            UsersRepository: The users repository.
         """
         raise NotImplementedError
 
@@ -83,9 +80,6 @@ class AbstractUnitOfWork(ABC):
     def profiles_repository(self) -> ProfilesRepository:
         """
         Abstract property to access the ProfilesRepository.
-
-        Returns:
-            ProfilesRepository: The profiles repository.
         """
         raise NotImplementedError
 
@@ -94,9 +88,14 @@ class AbstractUnitOfWork(ABC):
     def photos_repository(self) -> PhotosRepository:
         """
         Abstract property to access the PhotosRepository.
+        """
+        raise NotImplementedError
 
-        Returns:
-            PhotosRepository: The photos repository.
+    @property
+    @abstractmethod
+    def cities_repository(self) -> CitiesRepository:
+        """
+        Abstract property to access the CitiesRepository.
         """
         raise NotImplementedError
 
@@ -146,12 +145,14 @@ class UnitOfWork(AbstractUnitOfWork):
             _users_repository: An instance of UsersRepository, lazily initialized.
             _profiles_repository: An instance of ProfilesRepository, lazily initialized.
             _photos_repository: An instance of PhotosRepository, lazily initialized.
+            _cities_repository: An instance of CitiesRepository, lazily initialized.
         """
         self.session_factory = async_session_maker
         self._session = None
         self._users_repository = None
         self._profiles_repository = None
         self._photos_repository = None
+        self._cities_repository = None
 
     @property
     def session(self) -> AsyncSession:
@@ -172,9 +173,6 @@ class UnitOfWork(AbstractUnitOfWork):
     def users_repository(self) -> UsersRepository:
         """
         Lazily initializes and returns the UsersRepository.
-
-        Returns:
-            UsersRepository: The users repository.
         """
         if not self._users_repository:
             self._users_repository = UsersRepository(self.session)
@@ -184,9 +182,6 @@ class UnitOfWork(AbstractUnitOfWork):
     def profiles_repository(self) -> ProfilesRepository:
         """
         Lazily initializes and returns the ProfilesRepository.
-
-        Returns:
-            ProfilesRepository: The profiles repository.
         """
         if not self._profiles_repository:
             self._profiles_repository = ProfilesRepository(self.session)
@@ -196,13 +191,19 @@ class UnitOfWork(AbstractUnitOfWork):
     def photos_repository(self) -> PhotosRepository:
         """
         Lazily initializes and returns the PhotosRepository.
-
-        Returns:
-            PhotosRepository: The photos repository.
         """
         if not self._photos_repository:
             self._photos_repository = PhotosRepository(self.session)
         return self._photos_repository
+
+    @property
+    def cities_repository(self) -> CitiesRepository:
+        """
+        Lazily initializes and returns the CitiesRepository.
+        """
+        if not self._cities_repository:
+            self._cities_repository = CitiesRepository(self.session)
+        return self._cities_repository
 
     async def __aenter__(self):
         """

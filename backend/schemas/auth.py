@@ -59,8 +59,6 @@ class UserPhoto(BaseModel):
 
 
 class UserProfile(BaseModel):
-    id: UUID
-    email: EmailStr
     date_joined: datetime
     name: str
     birthday: date

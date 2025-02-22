@@ -92,7 +92,137 @@ export default defineI18nLocale(async locale => {
       name: "Имя",
       birthday: "День рождения",
       profile: {
-        gender: "Пол"
+        gender: "Пол",
+        heading: "Заголовок",
+        city: "Город",
+        height: "Рост",
+        height_suffix: "см",
+        body_type: "Тип телосложения",
+        ethnicity: "Этническая принадлежность",
+        relationship_status: "Семейное положение",
+        children: "Дети",
+        drink: "Отношение к алкоголю",
+        smoke: "Отношение к курению",
+        education: "Образование",
+        occupation: "Род занятий",
+        annual_income: "Годовой доход",
+        net_worth: "Собственный капитал",
+        about: "О себе",
+        about_hint: "Максимум 5000 символов",
+        gender_preference: "Гендерные предпочтения",
+        age_preference: "Возрастные предпочтения",
+        seeking_tags: "Поисковые теги"
+      }
+    },
+    types: {
+      gender_type: {
+        male: "Мужчина",
+        female: "Женщина",
+        other: "Другое"
+      },
+      body_type: {
+        slim: "Стройное телосложение",
+        athletic: "Атлетическое телосложение",
+        average: "Среднее телосложение",
+        curvy: "Изогнутые формы",
+        full_figure: "Полная фигура",
+        heavyset: "Крупное телосложение"
+      },
+      ethnicity_type: {
+        asian: "Азиат",
+        black_african_descent: "Темнокожий / Африканское происхождение",
+        latin_hispanic: "Латиноамериканец / Испаноязычный",
+        east_indian: "Выходец из Индии",
+        middle_eastern: "Ближневосточное происхождение",
+        mixed: "Смешанное происхождение",
+        native_american: "Коренной американец",
+        pacific_islander: "Выходец с островов Тихого океана",
+        white_caucasian: "Белый / Европейское происхождение",
+        other: "Другое"
+      },
+      relationship_status: {
+        single: "Холост / Не замужем",
+        divorced: "Разведен(а)",
+        separated: "В раздельном проживании",
+        widowed: "Вдова / Вдовец",
+        open: "Открытые отношения",
+        married: "Женат / Замужем"
+      },
+      drink_status: {
+        non_drinker: "Непьющий",
+        social_drinker: "Социально выпивающий",
+        heavy_drinker: "Пьяница"
+      },
+      smoke_status: {
+        non_smoker: "Некурящий",
+        light_smoker: "Легкий курильщик",
+        heavy_smoker: "Заядлый курильщик"
+      },
+      education_level: {
+        high_school: "Университет",
+        some_college: "Колледж",
+        associates_degree: "Степень младшего специалиста",
+        bachelors_degree: "Степень бакалавра",
+        graduate_degree: "Ученая степень",
+        phd_post_doctoral: "Кандидат наук / Постдокторант",
+        md_medical_doctor: "Доктор медицины / Врач",
+        lawyer_attorney: "Юрист / Адвокат"
+      },
+      occupation_type: {
+        technology: "Технологии",
+        healthcare: "Здравоохранение",
+        education: "Образование",
+        finance: "Финансы",
+        government: "Государственный сектор",
+        retail: "Розничная торговля",
+        hospitality: "Гостиничный бизнес",
+        construction: "Строительство",
+        transportation: "Транспорт",
+        entertainment: "Индустрия развлечений",
+        other: "Другое"
+      },
+      annual_income_level: {
+        below_20000: "менее 20,000",
+        from_20000_to_50000: "от 20,000 до 50,000",
+        from_50000_to_100000: "от 50,000 до 100,000",
+        from_100000_to_200000: "от 100,000 до 200,000",
+        from_200000_to_500000: "от 200,000 до 500,000",
+        from_500000_to_1000000: "от 500,000 до 1,000,000",
+        above_1000000: "более 1,000,000"
+      },
+      net_worth_level: {
+        below_50000: "менее 50,000",
+        from_50000_to_100000: "от 50,000 до 100,000",
+        from_100000_to_500000: "от 100,000 до 500,000",
+        from_500000_to_1000000: "от 500,000 до 1,000,000",
+        from_1000000_to_5000000: "от 1,000,000 до 5,000,000",
+        from_5000000_to_10000000: "от 5,000,000 до 10,000,000",
+        above_10000000: "более 10,000,000"
+      },
+      gender_preference: {
+        male: "Мужчины",
+        female: "Женщины",
+        other: "Другие"
+      },
+      seeking_tags: {
+        true_love: "Настоящая любовь",
+        active_lifestyle: "Активный образ жизни",
+        emotional_connection: "Эмоциональная связь",
+        long_term: "Долгосрочные отношения",
+        all_ethnicities: "Все этнические группы",
+        investor: "Инвестор",
+        life_of_leisure: "Жизнь в удовольствие",
+        luxury_lifestyle: "Роскошный образ жизни",
+        marriage_minded: "Ориентирован на брак",
+        mentorship: "Наставничество",
+        monogamous: "Моногамные отношения",
+        non_monogamous: "Немоногамные отношения",
+        no_strings_attached: "Без обязательств",
+        open_relationship: "Открытые отношения",
+        platonic: "Платонические отношения",
+        romance: "Романтика",
+        travel_to_you: "Путешествие к вам",
+        travel_with_me: "Путешествие со мной"
       }
     },
     base_btn: {

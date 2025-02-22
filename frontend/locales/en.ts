@@ -92,7 +92,137 @@ export default defineI18nLocale(async locale => {
       name: "Name",
       birthday: "Birthday",
       profile: {
-        gender: "Gender"
+        gender: "Gender",
+        heading: "Heading",
+        city: "City",
+        height: "Height",
+        height_suffix: "sm",
+        body_type: "Body type",
+        ethnicity: "Ethnicity",
+        relationship_status: "Relationship status",
+        children: "Children",
+        drink: "Attitude to alcohol",
+        smoke: "Attitude to smoking",
+        education: "Education",
+        occupation: "Occupation",
+        annual_income: "Annual income",
+        net_worth: "Net worth",
+        about: "About me",
+        about_hint: "Maximum 5000 character",
+        gender_preference: "Gender preference",
+        age_preference: "Age preference",
+        seeking_tags: "Seeking tags"
+      }
+    },
+    types: {
+      gender_type: {
+        male: "Male",
+        female: "Female",
+        other: "Other"
+      },
+      body_type: {
+        slim: "Slim",
+        athletic: "Athletic",
+        average: "Average",
+        curvy: "Curvy",
+        full_figure: "Full Figure",
+        heavyset: "Heavyset"
+      },
+      ethnicity_type: {
+        asian: "Asian",
+        black_african_descent: "Black / African Descent",
+        latin_hispanic: "Latin / Hispanic",
+        east_indian: "East Indian",
+        middle_eastern: "Middle Eastern",
+        mixed: "Mixed",
+        native_american: "Native American",
+        pacific_islander: "Pacific Islander",
+        white_caucasian: "White / Caucasian",
+        other: "Other"
+      },
+      relationship_status: {
+        single: "Single",
+        divorced: "Divorced",
+        separated: "Separated",
+        widowed: "Widowed",
+        open: "Open",
+        married: "Married"
+      },
+      drink_status: {
+        non_drinker: "Non Drinker",
+        social_drinker: "Social Drinker",
+        heavy_drinker: "Heavy Drinker"
+      },
+      smoke_status: {
+        non_smoker: "Non Smoker",
+        light_smoker: "Light Smoker",
+        heavy_smoker: "Heavy Smoker"
+      },
+      education_level: {
+        high_school: "High School",
+        some_college: "Some College",
+        associates_degree: "Associates Degree",
+        bachelors_degree: "Bachelors Degree",
+        graduate_degree: "Graduate Degree",
+        phd_post_doctoral: "PhD / Post Doctoral",
+        md_medical_doctor: "MD / Medical Doctor",
+        lawyer_attorney: "Lawyer / Attorney"
+      },
+      occupation_type: {
+        technology: "Technology",
+        healthcare: "Healthcare",
+        education: "Education",
+        finance: "Finance",
+        government: "Government",
+        retail: "Retail",
+        hospitality: "Hospitality",
+        construction: "Construction",
+        transportation: "Transportation",
+        entertainment: "Entertainment",
+        other: "Other"
+      },
+      annual_income_level: {
+        below_20000: "below 20,000",
+        from_20000_to_50000: "from 20,000 to 50,000",
+        from_50000_to_100000: "from 50,000 to 100,000",
+        from_100000_to_200000: "from 100,000 to 200,000",
+        from_200000_to_500000: "from 200,000 to 500,000",
+        from_500000_to_1000000: "from 500,000 to 1,000,000",
+        above_1000000: "above 1,000,000"
+      },
+      net_worth_level: {
+        below_50000: "below 50,000",
+        from_50000_to_100000: "from 50,000 to 100,000",
+        from_100000_to_500000: "from 100,000 to 500,000",
+        from_500000_to_1000000: "from 500,000 to 1,000,000",
+        from_1000000_to_5000000: "from 1,000,000 to 5,000,000",
+        from_5000000_to_10000000: "from 5,000,000 to 10,000,000",
+        above_10000000: "above 10,000,000"
+      },
+      gender_preference: {
+        male: "Men",
+        female: "Women",
+        other: "Others"
+      },
+      seeking_tags: {
+        true_love: "True Love",
+        active_lifestyle: "Active lifestyle",
+        emotional_connection: "Emotional connection",
+        long_term: "Long-term",
+        all_ethnicities: "All ethnicities",
+        investor: "Investor",
+        life_of_leisure: "Life of leisure",
+        luxury_lifestyle: "Luxury lifestyle",
+        marriage_minded: "Marriage minded",
+        mentorship: "Mentorship",
+        monogamous: "Monogamous",
+        non_monogamous: "Non-monogamous",
+        no_strings_attached: "No strings attached",
+        open_relationship: "Open relationship",
+        platonic: "Platonic",
+        romance: "Romance",
+        travel_to_you: "Travel to you",
+        travel_with_me: "Travel with me"
       }
     },
     base_btn: {

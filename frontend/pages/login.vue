@@ -16,7 +16,7 @@ const username = ref('')
 const password = ref('')
 const passwordShow = ref(false)
 
-const errors = ref<Record<string, any>>({})
+const rspErrors = ref<Record<string, any>>({})
 
 const login = async () => {
   isLoading.value = true
@@ -32,7 +32,7 @@ const login = async () => {
     useCookie('refreshToken').value = data.refresh_token
     useCookie('tokenType').value = data.token_type
 
-    errors.value = {}
+    rspErrors.value = {}
 
     const redirectPath = Array.isArray(route.query.redirect)
       ? route.query.redirect[0]
@@ -40,7 +40,7 @@ const login = async () => {
     return navigateTo(redirectPath || localePath('/'), { replace: true })
   } catch (error) {
     if (isAxiosError(error)) {
-      errors.value = {
+      rspErrors.value = {
         status: error.response?.status,
         detail: error.response?.data.detail
       }
@@ -71,8 +71,8 @@ const login = async () => {
 
       <v-alert
         v-if="
-          errors?.status === 401 &&
-          errors?.detail === 'Invalid username or password.'
+          rspErrors?.status === 401 &&
+          rspErrors?.detail === 'Invalid username or password.'
         "
         :text="$t('pages.login.error')"
         type="error"

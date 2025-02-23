@@ -89,8 +89,11 @@ export default defineI18nLocale(async locale => {
       email: "Email",
       password: "Password",
       confirm_password: "Confirm password",
+      date_joined: "Date of registration",
       name: "Name",
       birthday: "Birthday",
+      is_verified: "Profile is verified!",
+      not_verified: "Profile not verified!",
       profile: {
         gender: "Gender",
         heading: "Heading",
@@ -108,10 +111,10 @@ export default defineI18nLocale(async locale => {
         annual_income: "Annual income",
         net_worth: "Net worth",
         about: "About me",
-        about_hint: "Maximum 5000 character",
         gender_preference: "Gender preference",
         age_preference: "Age preference",
-        seeking_tags: "Seeking tags"
+        seeking_tags: "Seeking tags",
+        max_character: "Maximum {number} character"
       }
     },
     types: {

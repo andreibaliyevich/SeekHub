@@ -18,6 +18,7 @@ import type { Photo } from '~/types/photo'
 const { $axios } = useNuxtApp()
 const { t } = useI18n()
 const userStore = useUserStore()
+const { formatDate } = useDate()
 
 definePageMeta({ requiresAuth: true })
 useHead({
@@ -37,7 +38,7 @@ const height = ref<number | null>(null)
 const bodyType = ref<BodyType | null>(null)
 const ethnicity = ref<EthnicityType | null>(null)
 const relationshipStatus = ref<RelationshipStatus | null>(null)
-const children = ref(0)
+const children = ref<number | null>(null)
 const drink = ref<DrinkStatus | null>(null)
 const smoke = ref<SmokeStatus | null>(null)
 const education = ref<EducationLevel | null>(null)
@@ -136,14 +137,14 @@ const updateUserProfile = async () => {
   if (bodyType.value) profile.body_type = bodyType.value
   if (ethnicity.value) profile.ethnicity = ethnicity.value
   if (relationshipStatus.value) profile.relationship_status = relationshipStatus.value
-  if (children.value) profile.children = children.value
+  if (children.value !== null) profile.children = children.value
   if (drink.value) profile.drink = drink.value
   if (smoke.value) profile.smoke = smoke.value
   if (education.value) profile.education = education.value
   if (occupation.value) profile.occupation = occupation.value
   if (annualIncome.value) profile.annual_income = annualIncome.value
   if (netWorth.value) profile.net_worth = netWorth.value
-  if (about.value) profile.about = about.value
+  if (about.value !== null) profile.about = about.value
   if (genderPreference.value) profile.gender_preference = genderPreference.value
   if (agePreferenceMin.value) profile.age_preference_min = agePreferenceMin.value
   if (agePreferenceMax.value) profile.age_preference_max = agePreferenceMax.value
@@ -239,6 +240,32 @@ onMounted(() => {
         :cols="12"
         :sm="8"
       >
+        <v-alert
+          icon="mdi-calendar-range"
+          color="grey-darken-4"
+          variant="tonal"
+          class="mb-5"
+        >
+          {{ $t('user.date_joined') }}:
+          {{ formatDate(dateJoined) }}
+        </v-alert>
+        <v-alert
+          v-if="isVerified"
+          icon="mdi-check-decagram"
+          type="success"
+          variant="tonal"
+          class="mb-5"
+        >
+          {{ $t('user.is_verified') }}
+        </v-alert>
+        <v-alert
+          v-else
+          type="info"
+          variant="tonal"
+          class="mb-5"
+        >
+          {{ $t('user.not_verified') }}
+        </v-alert>
         <v-form
           @submit.prevent="updateUserProfile"
           class="d-flex flex-column ga-2"
@@ -281,6 +308,7 @@ onMounted(() => {
             variant="filled"
             prepend-inner-icon="mdi-invoice-text"
             :label="$t('user.profile.heading')"
+            :hint="$t('user.profile.max_character', { number: 50 })"
             :error-messages="rspErrors?.detail?.heading ?? []"
           ></v-text-field>
           <v-autocomplete
@@ -429,7 +457,7 @@ onMounted(() => {
             variant="filled"
             prepend-inner-icon="mdi-text-account"
             :label="$t('user.profile.about')"
-            :hint="$t('user.profile.about_hint')"
+            :hint="$t('user.profile.max_character', { number: 5000 })"
             :error-messages="rspErrors?.detail?.about ?? []"
           ></v-textarea>
           <v-select

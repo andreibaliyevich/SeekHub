@@ -89,8 +89,11 @@ export default defineI18nLocale(async locale => {
       email: "Электронная почта",
       password: "Пароль",
       confirm_password: "Подтвердите пароль",
+      date_joined: "Дата регистрации",
       name: "Имя",
       birthday: "День рождения",
+      is_verified: "Профиль проверен!",
+      not_verified: "Профиль не проверен!",
       profile: {
         gender: "Пол",
         heading: "Заголовок",
@@ -108,10 +111,10 @@ export default defineI18nLocale(async locale => {
         annual_income: "Годовой доход",
         net_worth: "Собственный капитал",
         about: "О себе",
-        about_hint: "Максимум 5000 символов",
         gender_preference: "Гендерные предпочтения",
         age_preference: "Возрастные предпочтения",
-        seeking_tags: "Поисковые теги"
+        seeking_tags: "Поисковые теги",
+        max_character: "Максимум {number} символов"
       }
     },
     types: {

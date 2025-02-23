@@ -25,6 +25,7 @@ export const useCity = () => {
             params: { query: value }
           })
           if (Array.isArray(data)) {
+            cityId.value = null
             cityOptions.value.length = 0
             data.forEach((item) => {
               cityOptions.value.push({
@@ -43,24 +44,30 @@ export const useCity = () => {
   }
 
   const getCityByLocation = async (event: PointerEvent) => {
-    isLoadingCity.value = true
-    navigator.geolocation.getCurrentPosition(async (position) => {
-      const { latitude, longitude } = position.coords
-      try {
-        const { data } = await $axios.get('/cities/nearest', {
-          params: {
-            latitude: latitude,
-            longitude: longitude
-          }
-        })
-        cityOptions.value.length = 0
-        setUserCity(data)
-      } catch (error) {
-        console.error(error)
-      } finally {
-        isLoadingCity.value = false
-      }
-    })
+    navigator.geolocation.getCurrentPosition(
+      async (position) => {
+        isLoadingCity.value = true
+        const { latitude, longitude } = position.coords
+        try {
+          const { data } = await $axios.get('/cities/nearest', {
+            params: {
+              latitude: latitude,
+              longitude: longitude
+            }
+          })
+          cityOptions.value.length = 0
+          setUserCity(data)
+        } catch (error) {
+          console.error(error)
+        } finally {
+          isLoadingCity.value = false
+        }
+      },
+      (error) => {
+        console.error(error.message)
+      },
+      { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
+    )
   }
 
   return {
